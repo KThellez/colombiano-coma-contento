@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Regiones{% endblock %}
+
+{% block content %}
+<h1 class="title">Listado de Regiones</h1>
+
+<a href="{{ url_for('private_region.crear_region') }}" class="button is-primary mb-3">
+  Crear Nueva Región
+</a>
+
+<table class="table is-striped is-fullwidth">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Encargado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for region in regiones %}
+    <tr>
+      <td>{{ region[0] }}</td>
+      <td>{{ region[1] }}</td>
+      <td>{{ region[2] }}</td>
+      <td>
+        <a href="{{ url_for('private_region.detalle_region', id=region[0]) }}" class="button is-small is-info">Ver</a>
+        <a href="{{ url_for('private_region.editar_region', id=region[0]) }}" class="button is-small is-warning">Editar</a>
+        <a href="{{ url_for('private_region.eliminar_region', id=region[0]) }}" class="button is-small is-danger">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

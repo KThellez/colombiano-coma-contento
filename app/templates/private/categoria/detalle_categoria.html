@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle Categoría{% endblock %}
+
+{% block content %}
+<h1 class="title">Detalle de Categoría</h1>
+
+<table class="table is-fullwidth">
+  <tr><th>ID</th><td>{{ categoria[0] }}</td></tr>
+  <tr><th>Nombre</th><td>{{ categoria[1] }}</td></tr>
+</table>
+
+<a href="{{ url_for('private_categoria.listado_categorias') }}" class="button is-light">Volver</a>
+{% endblock %}

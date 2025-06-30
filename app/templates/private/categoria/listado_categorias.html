@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Categorías{% endblock %}
+
+{% block content %}
+<h1 class="title">Listado de Categorías</h1>
+
+<a href="{{ url_for('private_categoria.crear_categoria') }}" class="button is-primary mb-3">
+  Crear Nueva Categoría
+</a>
+
+<table class="table is-striped is-fullwidth">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for categoria in categorias %}
+    <tr>
+      <td>{{ categoria[0] }}</td>
+      <td>{{ categoria[1] }}</td>
+      <td>
+        <a href="{{ url_for('private_categoria.detalle_categoria', id=categoria[0]) }}" class="button is-small is-info">Ver</a>
+        <a href="{{ url_for('private_categoria.editar_categoria', id=categoria[0]) }}" class="button is-small is-warning">Editar</a>
+        <a href="{{ url_for('private_categoria.eliminar_categoria', id=categoria[0]) }}" class="button is-small is-danger">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

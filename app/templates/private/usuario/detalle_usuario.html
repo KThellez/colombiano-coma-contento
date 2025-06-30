@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle Usuario{% endblock %}
+
+{% block content %}
+<h1 class="title">Detalle de Usuario</h1>
+
+<table class="table is-fullwidth">
+  <tr><th>ID</th><td>{{ usuario[0] }}</td></tr>
+  <tr><th>Username</th><td>{{ usuario[1] }}</td></tr>
+  <tr><th>Rol</th><td>{{ usuario[3] }}</td></tr>
+</table>
+
+<a href="{{ url_for('private_usuario.listado_usuarios') }}" class="button is-light">Volver</a>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Región{% endblock %}
+
+{% block content %}
+<h1 class="title">Crear Nueva Región</h1>
+
+<form method="post">
+  
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="field">
+    <label class="label">Nombre</label>
+    <div class="control">
+      <input class="input" type="text" name="nombre" required>
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Encargado</label>
+    <div class="control">
+      <input class="input" type="text" name="encargado">
+    </div>
+  </div>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-primary">Guardar</button>
+    </div>
+    <div class="control">
+      <a href="{{ url_for('private_region.listado_regiones') }}" class="button is-light">Cancelar</a>
+    </div>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle Carta{% endblock %}
+
+{% block content %}
+<h1 class="title">Detalle de Carta</h1>
+
+<table class="table is-fullwidth">
+  <tr><th>ID</th><td>{{ carta[0] }}</td></tr>
+  <tr><th>Nombre</th><td>{{ carta[1] }}</td></tr>
+  <tr><th>Fecha Inicio</th><td>{{ carta[2] }}</td></tr>
+  <tr><th>Fecha Fin</th><td>{{ carta[3] }}</td></tr>
+</table>
+
+<a href="{{ url_for('private_carta.listado_cartas') }}" class="button is-light">Volver</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle Región{% endblock %}
+
+{% block content %}
+<h1 class="title">{{ region[1] }}</h1>
+
+<p class="subtitle">Encargado: {{ region[2] }}</p>
+
+<a href="{{ url_for('public_region.listado_regiones_public') }}" class="button is-light mt-3">Volver a Regiones</a>
+{% endblock %}

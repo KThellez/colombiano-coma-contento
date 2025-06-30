@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="columns is-centered">
+  <div class="column is-half">
+    <h1 class="title has-text-centered">Iniciar Sesión</h1>
+
+    {% if error %}
+      <div class="notification is-danger">
+        {{ error }}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field">
+        <label class="label">Usuario</label>
+        <div class="control">
+          <input class="input" type="text" name="username" placeholder="Tu usuario" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Contraseña</label>
+        <div class="control">
+          <input class="input" type="password" name="password" placeholder="Tu contraseña" required>
+        </div>
+      </div>
+
+      <div class="field is-grouped is-grouped-right">
+        <div class="control">
+          <button class="button is-primary">Ingresar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle Plato{% endblock %}
+
+{% block content %}
+<h1 class="title">Detalle de Plato</h1>
+
+<table class="table is-fullwidth">
+  <tr><th>ID</th><td>{{ plato[0] }}</td></tr>
+  <tr><th>Nombre</th><td>{{ plato[1] }}</td></tr>
+  <tr><th>Descripción</th><td>{{ plato[2] }}</td></tr>
+  <tr><th>Nivel Complejidad</th><td>{{ plato[3] }}</td></tr>
+  <tr><th>Foto</th>
+    <td>
+      {% if plato[4] %}
+        <img src="{{ plato[4] }}" style="max-width: 200px;">
+      {% else %}
+        No disponible
+      {% endif %}
+    </td>
+  </tr>
+  <tr><th>Precio Venta</th><td>${{ plato[5] }}</td></tr>
+</table>
+
+<a href="{{ url_for('private_plato.listado_platos') }}" class="button is-light">Volver</a>
+{% endblock %}

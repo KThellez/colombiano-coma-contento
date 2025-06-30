@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Ingredientes{% endblock %}
+
+{% block content %}
+<h1 class="title">Listado de Ingredientes</h1>
+
+<a href="{{ url_for('private_ingrediente.crear_ingrediente') }}" class="button is-primary mb-3">
+  Crear Nuevo Ingrediente
+</a>
+
+<table class="table is-striped is-fullwidth">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Unidad de Medida</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ingrediente in ingredientes %}
+    <tr>
+      <td>{{ ingrediente[0] }}</td>
+      <td>{{ ingrediente[1] }}</td>
+      <td>{{ ingrediente[2] }}</td>
+      <td>
+        <a href="{{ url_for('private_ingrediente.detalle_ingrediente', id=ingrediente[0]) }}" class="button is-small is-info">Ver</a>
+        <a href="{{ url_for('private_ingrediente.editar_ingrediente', id=ingrediente[0]) }}" class="button is-small is-warning">Editar</a>
+        <a href="{{ url_for('private_ingrediente.eliminar_ingrediente', id=ingrediente[0]) }}" class="button is-small is-danger">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Cartas Disponibles{% endblock %}
+
+{% block content %}
+<h1 class="title">Cartas Disponibles</h1>
+
+<div class="columns is-multiline">
+  {% for carta in cartas %}
+  <div class="column is-one-third">
+    <div class="card">
+      <div class="card-content">
+        <p class="title">{{ carta[1] }}</p>
+        <p class="subtitle">Del {{ carta[2] }} al {{ carta[3] }}</p>
+      </div>
+      <footer class="card-footer">
+        <a href="{{ url_for('public_carta.detalle_carta_public', id=carta[0]) }}" class="card-footer-item">Ver Detalle</a>
+      </footer>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

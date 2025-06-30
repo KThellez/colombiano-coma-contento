@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle Región{% endblock %}
+
+{% block content %}
+<h1 class="title">Detalle de Región</h1>
+
+<table class="table is-fullwidth">
+  <tr><th>ID</th><td>{{ region[0] }}</td></tr>
+  <tr><th>Nombre</th><td>{{ region[1] }}</td></tr>
+  <tr><th>Encargado</th><td>{{ region[2] }}</td></tr>
+</table>
+
+<a href="{{ url_for('private_region.listado_regiones') }}" class="button is-light">Volver</a>
+{% endblock %}
