@@ -25,9 +25,13 @@
     </tbody>
   </table>
 
+
+  <a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-light mt-3">Volver a Platos</a>
+  <a href="{{ url_for('public_plato.listado_cartas_public') }}" class="button is-light mt-3">Volver a Carta</a>
   <a href="{{ url_for('public_carrito.finalizar_compra') }}" class="button is-success mt-3">
     Finalizar Compra
   </a>
+
 {% else %}
   <p>No tienes platos en el carrito.</p>
 {% endif %}

@@ -16,6 +16,10 @@
       </div>
       <footer class="card-footer">
         <a href="{{ url_for('public_plato.detalle_plato_public', id=plato[0]) }}" class="card-footer-item">Ver Detalle</a>
+        <a href="{{ url_for('public_carrito.agregar_al_carrito', plato_id=plato[0]) }}"
+              class="card-footer-item button is-success">
+            Añadir al carrito
+        </a>
       </footer>
     </div>
   </div>
