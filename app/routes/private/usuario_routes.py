@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from app.models import usuario_model
+from werkzeug.security import generate_password_hash
 
 #Just TO test
 from app.utils.fake_data import obtener_usuarios_fake
@@ -25,7 +26,8 @@ def crear_usuario():
         username = request.form['username']
         password = request.form['password']  # ¡Asegúrate de encriptar esto en producción!
         rol = request.form['rol']
-        usuario_model.crear_usuario(username, password, rol)
+        newPass = generate_password_hash(password)
+        usuario_model.crear_usuario(username, newPass, rol)
         return redirect(url_for('private_usuario.listado_usuarios'))
     return render_template('private/usuario/crear_usuario.html')
 
@@ -38,7 +40,7 @@ def editar_usuario(id):
     if request.method == 'POST':
         new_data = {
             "username": request.form['username'],
-            "password": request.form['password'],  # También encriptar aquí
+            "password": generate_password_hash(request.form['password']),
             "rol": request.form['rol']
         }
         usuario_model.actualizar_usuario(id, new_data)
