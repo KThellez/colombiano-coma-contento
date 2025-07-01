@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
+from werkzeug.security import check_password_hash
 from app.models import usuario_model
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -24,7 +25,8 @@ def login():
         password = request.form['password']
 
         usuario = usuario_model.obtener_usuario_por_username(username)
-        if usuario and usuario[2] == password:  # ⚠️ Solo temporal (sin encriptar)
+        #if usuario and usuario[2] == password:  # ⚠️ Solo temporal (sin encriptar)
+        if usuario and check_password_hash(usuario[2], password):
             session['usuario_id'] = usuario[0]
             session['username'] = usuario[1]
             session['rol'] = usuario[3]
