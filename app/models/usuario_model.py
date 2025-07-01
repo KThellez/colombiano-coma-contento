@@ -59,7 +59,8 @@ def obtener_usuario_por_username(username):
 
     query ="SELECT * FROM usuarios WHERE username = %s"
     params =(username,)
-    return safe_execute(query, params, fetch=True) or []
+    resultados = safe_execute(query, params, fetch=True)
+    return resultados[0] if resultados else None
 
 
 def obtener_usuario_por_id(user_id):
