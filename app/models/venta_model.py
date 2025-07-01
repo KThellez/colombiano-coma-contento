@@ -82,3 +82,14 @@ def eliminar_venta(id_venta):
     params =(id_venta,)
     return safe_execute(query, params)
 
+
+def crear_venta(franja_horaria_id):
+    query = """
+        INSERT INTO ventas (fecha, franja_horaria_id)
+        VALUES (NOW(), %s)
+        RETURNING id;
+    """
+    params = (franja_horaria_id,)
+    result = safe_execute(query, params, fetch=True)
+    return result[0][0] if result else None
+

@@ -21,4 +21,11 @@
 </div>
 
 <a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-light mt-3">Volver a Platos</a>
+
+<a href="{{ url_for('public_carrito.agregar_al_carrito', plato_id=plato[0]) }}"
+   class="button is-primary is-small">
+    Añadir al carrito
+</a>
+
+
 {% endblock %}

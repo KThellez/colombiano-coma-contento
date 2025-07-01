@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Compra Finalizada{% endblock %}
+{% block content %}
+
+
+<div class="notification is-success">
+  <h1 class="title">¡Gracias por tu compra!</h1>
+  <p>Tu pedido ha sido registrado exitosamente.</p>
+</div>
+<a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-primary mt-4">
+  Volver a Platos
+</a>
+
+{% endblock %}

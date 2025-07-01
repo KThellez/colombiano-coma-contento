@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Acceso Prohibido{% endblock %}
+{% block content %}
+<div class="notification is-danger">
+  <h1 class="title">403 - Acceso Prohibido</h1>
+  <p>No tienes permisos para acceder a esta página.</p>
+</div>
+<a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-primary mt-3">
+  Ir al inicio
+</a>
+{% endblock %}

@@ -54,3 +54,13 @@ def obtener_detalle_venta(id_venta):
     params =(id_venta,)
     return safe_execute(query, params, fetch=True) or []
 
+
+def crear_detalle_venta(id_venta, id_plato, cantidad, precio_unitario):
+    query = """
+        INSERT INTO detalle_venta (id_venta, id_plato, cantidad, precio_unitario)
+        VALUES (%s, %s, %s, %s)
+    """
+    params = (id_venta, id_plato, cantidad, precio_unitario)
+    safe_execute(query, params)
+
+

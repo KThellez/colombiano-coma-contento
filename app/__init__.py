@@ -10,8 +10,11 @@ from app.routes.private.usuario_routes import private_usuario_bp
 from app.routes.public.plato_routes import public_plato_bp
 from app.routes.public.carta_routes import public_carta_bp
 from app.routes.public.region_routes import public_region_bp
+from app.routes.public.carrito_routes import public_carrito_bp
 
 from app.routes.auth.auth_routes import auth_bp
+
+from app.routes.utils.password_routes import utils_bp
 
 
 from flask_wtf import CSRFProtect
@@ -50,7 +53,7 @@ def create_app():
     register_private_blueprint(app)
     register_public_blueprint(app)
     register_auth_blueprint(app)
-    
+    register_utils_blueprint(app)
 
     # Registrar manejadores de errores
     register_error_handlers(app)
@@ -70,6 +73,10 @@ def register_public_blueprint(app):
     app.register_blueprint(public_plato_bp)
     app.register_blueprint(public_carta_bp)
     app.register_blueprint(public_region_bp)
+    app.register_blueprint(public_carrito_bp)
 
 def register_auth_blueprint(app):
     app.register_blueprint(auth_bp)
+
+def register_utils_blueprint(app):
+    app.register_blueprint(utils_bp)

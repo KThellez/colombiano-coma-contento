@@ -6,11 +6,44 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
 <body>
-  <nav class="navbar is-primary">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">Colombiano Coma Contento</a>
+  
+  <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="{{ url_for('public_plato.listado_platos_public') }}">
+      Colombiano Coma Contento
+    </a>
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      {% if session.get('rol') == 'admin' %}
+        <a class="navbar-item" href="{{ url_for('private_plato.listado_platos') }}">Platos</a>
+        <a class="navbar-item" href="{{ url_for('private_carta.listado_cartas') }}">Cartas</a>
+        <a class="navbar-item" href="{{ url_for('private_region.listado_regiones') }}">Regiones</a>
+        <a class="navbar-item" href="{{ url_for('private_usuario.listado_usuarios') }}">Usuarios</a>
+      {% else %}
+        <a class="navbar-item" href="{{ url_for('public_carta.listado_cartas_public') }}">Cartas</a>
+        <a class="navbar-item" href="{{ url_for('public_plato.listado_platos_public') }}">Platos</a>
+        <a class="navbar-item" href="{{ url_for('public_region.listado_regiones_public') }}">Regiones</a>
+      {% endif %}
     </div>
-  </nav>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        {% if session.get('usuario_id') %}
+          <div>Hola, {{ session['username'] }}</div>
+          <div class="buttons ml-2">
+            <a class="button is-light" href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+          </div>
+        {% else %}
+          <div class="buttons">
+            <a class="button is-light" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
 
   <section class="section">
     <div class="container">
