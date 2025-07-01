@@ -26,7 +26,7 @@ def login():
 
         usuario = usuario_model.obtener_usuario_por_username(username)
         #if usuario and usuario[2] == password:  # ⚠️ Solo temporal (sin encriptar)
-        if usuario and check_password_hash(usuario[2], password):
+        if usuario is not None and check_password_hash(usuario[2], password):
             session['usuario_id'] = usuario[0]
             session['username'] = usuario[1]
             session['rol'] = usuario[3]
