@@ -17,6 +17,7 @@
   <div class="navbar-menu">
     <div class="navbar-start">
       {% if session.get('rol') == 'admin' %}
+        <a class="navbar-item" href="{{ url_for('private_ingrediente.listado_ingredientes') }}">Ingredientes</a>
         <a class="navbar-item" href="{{ url_for('private_dashboard.dashboard_home') }}">Dashboard</a>
         <a class="navbar-item" href="{{ url_for('private_plato.listado_platos') }}">Platos</a>
         <a class="navbar-item" href="{{ url_for('private_carta.listado_cartas') }}">Cartas</a>

@@ -93,7 +93,7 @@ def crear_venta(franja_horaria_id):
     result = safe_execute(query, params, fetch=True)
     return result[0][0] if result else None
 
-## METODOS PARA LOS DASHBORADS
+## METODOS PARA LOS DASHBOARDS
 
 
 def ventas_por_mes():
