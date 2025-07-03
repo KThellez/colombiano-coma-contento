@@ -17,6 +17,8 @@
   <div class="navbar-menu">
     <div class="navbar-start">
       {% if session.get('rol') == 'admin' %}
+        <a class="navbar-item" href="{{ url_for('private_ingrediente.listado_ingredientes') }}">Ingredientes</a>
+        <a class="navbar-item" href="{{ url_for('private_dashboard.dashboard_home') }}">Dashboard</a>
         <a class="navbar-item" href="{{ url_for('private_plato.listado_platos') }}">Platos</a>
         <a class="navbar-item" href="{{ url_for('private_carta.listado_cartas') }}">Cartas</a>
         <a class="navbar-item" href="{{ url_for('private_region.listado_regiones') }}">Regiones</a>
@@ -26,6 +28,7 @@
         <a class="navbar-item" href="{{ url_for('public_plato.listado_platos_public') }}">Platos</a>
         <a class="navbar-item" href="{{ url_for('public_region.listado_regiones_public') }}">Regiones</a>
       {% endif %}
+      </div>
     </div>
 
     <div class="navbar-end">

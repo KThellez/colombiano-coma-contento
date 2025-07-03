@@ -6,6 +6,7 @@ from app.routes.private.ingrediente_routes import private_ingrediente_bp
 from app.routes.private.carta_routes import private_carta_bp
 from app.routes.private.venta_routes import private_venta_bp
 from app.routes.private.usuario_routes import private_usuario_bp
+from app.routes.private.dashboard_routes import private_dashboard_bp
 
 from app.routes.public.plato_routes import public_plato_bp
 from app.routes.public.carta_routes import public_carta_bp
@@ -68,6 +69,7 @@ def register_private_blueprint(app):
     app.register_blueprint(private_carta_bp)
     app.register_blueprint(private_venta_bp)
     app.register_blueprint(private_usuario_bp)
+    app.register_blueprint(private_dashboard_bp)
 
 def register_public_blueprint(app):
     app.register_blueprint(public_plato_bp)

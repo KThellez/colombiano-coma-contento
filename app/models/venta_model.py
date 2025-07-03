@@ -93,3 +93,86 @@ def crear_venta(franja_horaria_id):
     result = safe_execute(query, params, fetch=True)
     return result[0][0] if result else None
 
+## METODOS PARA LOS DASHBOARDS
+
+
+def ventas_por_mes():
+    query = """
+        SELECT
+            TO_CHAR(fecha, 'YYYY-MM') AS mes,
+            SUM(dv.cantidad * dv.precio_unitario) AS total
+        FROM ventas v
+        JOIN detalle_venta dv ON v.id = dv.id_venta
+        GROUP BY mes
+        ORDER BY mes
+    """
+    return safe_execute(query, fetch=True) or []
+
+
+def ventas_por_anio():
+    query = """
+        SELECT
+            EXTRACT(YEAR FROM fecha) AS anio,
+            SUM(dv.cantidad * dv.precio_unitario) AS total
+        FROM ventas v
+        JOIN detalle_venta dv ON v.id = dv.id_venta
+        GROUP BY anio
+        ORDER BY anio
+    """
+    return safe_execute(query, fetch=True) or []
+
+
+def top_platos():
+    query = """
+        SELECT
+            p.nombre,
+            SUM(dv.cantidad) AS cantidad
+        FROM detalle_venta dv
+        JOIN platos p ON dv.id_plato = p.id
+        GROUP BY p.nombre
+        ORDER BY cantidad DESC
+        LIMIT 5
+    """
+    return safe_execute(query, fetch=True) or []
+
+
+def ventas_por_region():
+    query = """
+        SELECT
+            r.nombre,
+            SUM(dv.cantidad * dv.precio_unitario) AS total
+        FROM regiones r
+        JOIN platos p ON p.id_region = r.id
+        JOIN detalle_venta dv ON dv.id_plato = p.id
+        GROUP BY r.nombre
+        ORDER BY total DESC
+    """
+    return safe_execute(query, fetch=True) or []
+
+
+def ventas_por_categoria():
+    query = """
+        SELECT
+            c.nombre,
+            SUM(dv.cantidad * dv.precio_unitario) AS total
+        FROM categorias c
+        JOIN platos p ON p.id_categoria = c.id
+        JOIN detalle_venta dv ON dv.id_plato = p.id
+        GROUP BY c.nombre
+        ORDER BY total DESC
+    """
+    return safe_execute(query, fetch=True) or []
+
+
+def ventas_por_franja():
+    query = """
+        SELECT
+            f.nombre,
+            SUM(dv.cantidad * dv.precio_unitario) AS total
+        FROM franjas_horarias f
+        JOIN ventas v ON v.franja_horaria_id = f.id
+        JOIN detalle_venta dv ON dv.id_venta = v.id
+        GROUP BY f.nombre
+        ORDER BY total DESC
+    """
+    return safe_execute(query, fetch=True) or []
