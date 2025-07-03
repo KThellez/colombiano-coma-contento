@@ -7,7 +7,39 @@
   <h1 class="title">¡Gracias por tu compra!</h1>
   <p>Tu pedido ha sido registrado exitosamente.</p>
 </div>
-<a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-primary mt-4">
+<div >
+  <p>ID Venta: {{ venta.id_venta }}</p>
+  <p>Fecha: {{ venta.fecha }}</p>
+  <p>Franja Horaria: {{ venta.franja }}</p>
+</div>
+
+<table class="table is-fullwidth is-striped mt-3">
+  <thead>
+    <tr>
+      <th>Plato</th>
+      <th>Precio</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for plato in venta.platos %}
+    <tr>
+      <td>{{ plato.nombre }}</td>
+      <td>${{ plato.precio }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2 class="subtitle">Total: ${{ venta.total }}</h2>
+
+
+<a href="{{ url_for('public_carrito.generar_factura_pdf', id_venta=venta.id_venta) }}"
+   class="button is-link mt-3">
+  Descargar Factura en PDF
+</a>
+
+
+<a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-primary mt-3">
   Volver a Platos
 </a>
 

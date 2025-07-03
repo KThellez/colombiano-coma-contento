@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<h1 class="title">Dashboard de Ventas</h1>
+
+<div class="columns is-multiline">
+  <div class="column is-half">
+    <h2 class="subtitle">Ventas Mensuales</h2>
+    <canvas id="chartMensual"></canvas>
+  </div>
+
+  <div class="column is-half">
+    <h2 class="subtitle">Ventas Anuales</h2>
+    <canvas id="chartAnual"></canvas>
+  </div>
+
+  <div class="column is-half">
+    <h2 class="subtitle">Top Platos Vendidos</h2>
+    <canvas id="chartTopPlatos"></canvas>
+  </div>
+
+  <div class="column is-half">
+    <h2 class="subtitle">Ventas por Región</h2>
+    <canvas id="chartRegion"></canvas>
+  </div>
+
+  <div class="column is-half">
+    <h2 class="subtitle">Ventas por Categoría</h2>
+    <canvas id="chartCategoria"></canvas>
+  </div>
+
+  <div class="column is-half">
+    <h2 class="subtitle">Ventas por Franja Horaria</h2>
+    <canvas id="chartFranja"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const charts = {
+    chartMensual: '/private/dashboard/ventas_mensuales',
+    chartAnual: '/private/dashboard/ventas_anuales',
+    chartTopPlatos: '/private/dashboard/top_platos',
+    chartRegion: '/private/dashboard/ventas_por_region',
+    chartCategoria: '/private/dashboard/ventas_por_categoria',
+    chartFranja: '/private/dashboard/ventas_por_franja'
+  };
+
+  for (const [id, url] of Object.entries(charts)) {
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const ctx = document.getElementById(id).getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              label: id,
+              data: data.data,
+              backgroundColor: 'rgba(54, 162, 235, 0.5)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      });
+  }
+</script>
+{% endblock %}
