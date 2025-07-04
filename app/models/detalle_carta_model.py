@@ -10,7 +10,6 @@ Funciones incluidas:
 - eliminar_plato_de_carta
 """
 
-
 from app.db.connection import safe_execute
 
 def agregar_plato_a_carta(id_carta, id_plato):
@@ -24,12 +23,15 @@ def agregar_plato_a_carta(id_carta, id_plato):
     Returns:
         None
     """
-    query ="""
-                INSERT INTO detalle_carta (id_carta, id_plato)
-                VALUES (%s, %s)
-            """
-    params =(id_carta, id_plato)
-    return safe_execute(query, params)
+    try:
+        query = """
+            INSERT INTO detallar (id_carta_fk, id_plato_fk)
+            VALUES (%s, %s)
+        """
+        return safe_execute(query, (id_carta, id_plato))
+    except Exception as e:
+        print(f"[ERROR agregar_plato_a_carta] {e}")
+        return None
 
 
 def obtener_platos_de_carta(id_carta):
@@ -42,14 +44,17 @@ def obtener_platos_de_carta(id_carta):
     Returns:
         list: Lista de platos.
     """
-    query ="""
-                SELECT p.id, p.nombre, p.precio_venta
-                FROM platos p
-                JOIN detalle_carta dc ON p.id = dc.id_plato
-                WHERE dc.id_carta = %s AND p.disponible = TRUE
-            """
-    params =(id_carta,)
-    return safe_execute(query, params, fetch=True) or []
+    try:
+        query = """
+            SELECT p.id_plato, p.nombre, p.precio
+            FROM plato p
+            JOIN detallar d ON p.id_plato = d.id_plato_fk
+            WHERE d.id_carta_fk = %s AND p.disponible = TRUE
+        """
+        return safe_execute(query, (id_carta,), fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_platos_de_carta] {e}")
+        return []
 
 
 def eliminar_plato_de_carta(id_carta, id_plato):
@@ -63,10 +68,12 @@ def eliminar_plato_de_carta(id_carta, id_plato):
     Returns:
         None
     """
-    query ="""
-                DELETE FROM detalle_carta
-                WHERE id_carta = %s AND id_plato = %s
-            """
-    params =(id_carta, id_plato)
-    return safe_execute(query, params)
-
+    try:
+        query = """
+            DELETE FROM detallar
+            WHERE id_carta_fk = %s AND id_plato_fk = %s
+        """
+        return safe_execute(query, (id_carta, id_plato))
+    except Exception as e:
+        print(f"[ERROR eliminar_plato_de_carta] {e}")
+        return None

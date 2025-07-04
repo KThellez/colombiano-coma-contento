@@ -13,7 +13,6 @@ Funciones incluidas:
 - eliminar_franja
 """
 
-
 from app.db.connection import safe_execute
 
 def crear_franja(nombre):
@@ -26,11 +25,12 @@ def crear_franja(nombre):
     Returns:
         None
     """
-
-    query ="INSERT INTO franjas_horarias (nombre) VALUES (%s)"
-    params =(nombre,)
-    return safe_execute(query, params)
-
+    try:
+        query = "INSERT INTO franja_horaria (nombre) VALUES (%s)"
+        return safe_execute(query, (nombre,))
+    except Exception as e:
+        print(f"[ERROR crear_franja] {e}")
+        return None
 
 
 def obtener_franjas():
@@ -40,9 +40,12 @@ def obtener_franjas():
     Returns:
         list: Lista de franjas horarias.
     """
-
-    query = "SELECT * FROM franjas_horarias"
-    return safe_execute(query, fetch=True) or []
+    try:
+        query = "SELECT * FROM franja_horaria"
+        return safe_execute(query, fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_franjas] {e}")
+        return []
 
 
 def obtener_franja_por_id(id_franja):
@@ -55,11 +58,13 @@ def obtener_franja_por_id(id_franja):
     Returns:
         tuple: Datos de la franja.
     """
+    try:
+        query = "SELECT * FROM franja_horaria WHERE id_franja_horaria = %s"
+        return safe_execute(query, (id_franja,), fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_franja_por_id] {e}")
+        return []
 
-    query ="SELECT * FROM franjas_horarias WHERE id = %s"
-    params =(id_franja,)
-    return safe_execute(query, params, fetch=True) or []
-    
 
 def actualizar_franja(id_franja, nuevo_nombre):
     """
@@ -72,9 +77,12 @@ def actualizar_franja(id_franja, nuevo_nombre):
     Returns:
         None
     """
-    query ="UPDATE franjas_horarias SET nombre = %s WHERE id = %s"
-    params =(nuevo_nombre, id_franja)
-    return safe_execute(query, params)
+    try:
+        query = "UPDATE franja_horaria SET nombre = %s WHERE id_franja_horaria = %s"
+        return safe_execute(query, (nuevo_nombre, id_franja))
+    except Exception as e:
+        print(f"[ERROR actualizar_franja] {e}")
+        return None
 
 
 def eliminar_franja(id_franja):
@@ -87,8 +95,9 @@ def eliminar_franja(id_franja):
     Returns:
         None
     """
-
-    query ="DELETE FROM franjas_horarias WHERE id = %s"
-    params =(id_franja,)
-    return safe_execute(query, params)
-
+    try:
+        query = "DELETE FROM franja_horaria WHERE id_franja_horaria = %s"
+        return safe_execute(query, (id_franja,))
+    except Exception as e:
+        print(f"[ERROR eliminar_franja] {e}")
+        return None

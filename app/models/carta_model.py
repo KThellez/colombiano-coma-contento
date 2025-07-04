@@ -26,15 +26,18 @@ def crear_carta(nombre, fecha_inicio, fecha_fin):
     Returns:
         None
     """
-    
-    query ="""
-                INSERT INTO cartas (nombre, fecha_inicio, fecha_fin)
-                VALUES (%s, %s, %s)
-            """
-    params = (nombre, fecha_inicio, fecha_fin)
-    
-    return safe_execute(query, params)
-    
+    try:
+        query = """
+            INSERT INTO carta (nombre, fecha_inicio, fecha_fin)
+            VALUES (%s, %s, %s)
+        """
+        params = (nombre, fecha_inicio, fecha_fin)
+        return safe_execute(query, params)
+    except Exception as e:
+        print(f"[ERROR crear_carta] {e}")
+        return None
+
+
 def obtener_cartas():
     """
     Obtiene todas las cartas registradas.
@@ -42,9 +45,12 @@ def obtener_cartas():
     Returns:
         list: Lista de cartas.
     """
-    query = "SELECT * FROM cartas"
-
-    return safe_execute(query, fetch=True) or []
+    try:
+        query = "SELECT * FROM carta"
+        return safe_execute(query, fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_cartas] {e}")
+        return []
 
 
 def obtener_carta_por_id(id_carta):
@@ -57,10 +63,13 @@ def obtener_carta_por_id(id_carta):
     Returns:
         tuple: Datos de la carta.
     """
-    query ="SELECT * FROM cartas WHERE id = %s"
-    params =(id_carta,)
-    return safe_execute(query, params, fetch=True) or[]
-    
+    try:
+        query = "SELECT * FROM carta WHERE id_carta = %s"
+        return safe_execute(query, (id_carta,), fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_carta_por_id] {e}")
+        return []
+
 
 def actualizar_carta(id_carta, nombre, fecha_inicio, fecha_fin):
     """
@@ -75,14 +84,18 @@ def actualizar_carta(id_carta, nombre, fecha_inicio, fecha_fin):
     Returns:
         None
     """
-    query ="""
-                UPDATE cartas
-                SET nombre = %s, fecha_inicio = %s, fecha_fin = %s
-                WHERE id = %s
-            """
-    params =(nombre, fecha_inicio, fecha_fin, id_carta)
-    return safe_execute(query, params)
-    
+    try:
+        query = """
+            UPDATE carta
+            SET nombre = %s, fecha_inicio = %s, fecha_fin = %s
+            WHERE id_carta = %s
+        """
+        params = (nombre, fecha_inicio, fecha_fin, id_carta)
+        return safe_execute(query, params)
+    except Exception as e:
+        print(f"[ERROR actualizar_carta] {e}")
+        return None
+
 
 def eliminar_carta(id_carta):
     """
@@ -95,6 +108,9 @@ def eliminar_carta(id_carta):
     Returns:
         None
     """
-    query = "DELETE FROM cartas WHERE id = %s"
-    params =(id_carta,)
-    return safe_execute(query, params)
+    try:
+        query = "DELETE FROM carta WHERE id_carta = %s"
+        return safe_execute(query, (id_carta,))
+    except Exception as e:
+        print(f"[ERROR eliminar_carta] {e}")
+        return None

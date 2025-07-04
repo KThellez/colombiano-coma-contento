@@ -12,7 +12,6 @@ Funciones incluidas:
 - eliminar_plato
 """
 
-
 from app.db.connection import safe_execute
 
 def crear_plato(data):
@@ -23,24 +22,28 @@ def crear_plato(data):
         data (dict): Diccionario con claves:
             - nombre (str)
             - descripcion (str)
-            - nivel_complejidad (str)
             - foto (str)
-            - precio_venta (float)
-            - id_region (int)
-            - id_categoria (int)
+            - precio (float)
+            - id_region_fk (int)
+            - id_categoria_fk (int)
+            - id_nivel_complejidad_fk (int)
 
     Returns:
         None
     """
-    query ="""
-                INSERT INTO platos (nombre, descripcion, nivel_complejidad, foto, precio_venta, id_region, id_categoria)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """
-    params =(
-                data["nombre"], data["descripcion"], data["nivel_complejidad"], data["foto"],
-                data["precio_venta"], data["id_region"], data["id_categoria"]
-            )
-    return safe_execute(query, params)
+    try:
+        query = """
+            INSERT INTO plato (nombre, descripcion, foto, precio, disponible, id_region_fk, id_categoria_fk, id_nivel_complejidad_fk)
+            VALUES (%s, %s, %s, %s, TRUE, %s, %s, %s)
+        """
+        params = (
+            data["nombre"], data["descripcion"], data["foto"], data["precio"],
+            data["id_region_fk"], data["id_categoria_fk"], data["id_nivel_complejidad_fk"]
+        )
+        return safe_execute(query, params)
+    except Exception as e:
+        print(f"[ERROR crear_plato] {e}")
+        return None
 
 
 def obtener_platos():
@@ -50,8 +53,12 @@ def obtener_platos():
     Returns:
         list: Lista de platos.
     """
-    query ="SELECT * FROM platos"
-    return safe_execute(query, fetch=True) or []
+    try:
+        query = "SELECT * FROM plato"
+        return safe_execute(query, fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_platos] {e}")
+        return []
 
 
 def obtener_plato_por_id(id_plato):
@@ -64,9 +71,12 @@ def obtener_plato_por_id(id_plato):
     Returns:
         tuple: Datos del plato.
     """
-    query ="SELECT * FROM platos WHERE id = %s"
-    params =(id_plato,)
-    return safe_execute(query, params, fetch=True)
+    try:
+        query = "SELECT * FROM plato WHERE id_plato = %s"
+        return safe_execute(query, (id_plato,), fetch=True)
+    except Exception as e:
+        print(f"[ERROR obtener_plato_por_id] {e}")
+        return []
 
 
 def actualizar_plato(id_plato, data):
@@ -80,18 +90,27 @@ def actualizar_plato(id_plato, data):
     Returns:
         None
     """
-    query ="""
-                UPDATE platos
-                SET nombre = %s, descripcion = %s, nivel_complejidad = %s,
-                    foto = %s, precio_venta = %s, id_region = %s, id_categoria = %s
-                WHERE id = %s
-            """
-    params =(
-                data["nombre"], data["descripcion"], data["nivel_complejidad"], data["foto"],
-                data["precio_venta"], data["id_region"], data["id_categoria"], id_plato
-            )
-    return safe_execute(query, params)
-    
+    try:
+        query = """
+            UPDATE plato
+            SET nombre = %s,
+                descripcion = %s,
+                foto = %s,
+                precio = %s,
+                id_region_fk = %s,
+                id_categoria_fk = %s,
+                id_nivel_complejidad_fk = %s
+            WHERE id_plato = %s
+        """
+        params = (
+            data["nombre"], data["descripcion"], data["foto"], data["precio"],
+            data["id_region_fk"], data["id_categoria_fk"], data["id_nivel_complejidad_fk"], id_plato
+        )
+        return safe_execute(query, params)
+    except Exception as e:
+        print(f"[ERROR actualizar_plato] {e}")
+        return None
+
 
 def eliminar_plato(id_plato):
     """
@@ -104,7 +123,9 @@ def eliminar_plato(id_plato):
     Returns:
         None
     """
-    query ="DELETE FROM platos WHERE id = %s"
-    params =(id_plato,)
-    return safe_execute(query, params)
-
+    try:
+        query = "DELETE FROM plato WHERE id_plato = %s"
+        return safe_execute(query, (id_plato,))
+    except Exception as e:
+        print(f"[ERROR eliminar_plato] {e}")
+        return None

@@ -13,7 +13,6 @@ Funciones incluidas:
 - eliminar_usuario
 """
 
-
 from app.db.connection import safe_execute
 
 def crear_usuario(username, password, rol='cliente'):
@@ -28,12 +27,16 @@ def crear_usuario(username, password, rol='cliente'):
     Returns:
         None
     """
-    query ="""
-                INSERT INTO usuarios (username, password, rol)
-                VALUES (%s, %s, %s)
-            """
-    params =(username, password, rol)
-    return safe_execute(query, params)
+    try:
+        query = """
+            INSERT INTO usuario (username, password, rol)
+            VALUES (%s, %s, %s)
+        """
+        return safe_execute(query, (username, password, rol))
+    except Exception as e:
+        print(f"[ERROR crear_usuario] {e}")
+        return None
+
 
 def obtener_usuarios():
     """
@@ -42,8 +45,12 @@ def obtener_usuarios():
     Returns:
         list: Lista de usuarios.
     """
-    query ="SELECT * FROM usuarios"
-    return safe_execute(query, fetch=True) or []
+    try:
+        query = "SELECT * FROM usuario"
+        return safe_execute(query, fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_usuarios] {e}")
+        return []
 
 
 def obtener_usuario_por_username(username):
@@ -56,11 +63,13 @@ def obtener_usuario_por_username(username):
     Returns:
         tuple: Datos del usuario.
     """
-
-    query ="SELECT * FROM usuarios WHERE username = %s"
-    params =(username,)
-    resultados = safe_execute(query, params, fetch=True)
-    return resultados[0] if resultados else None
+    try:
+        query = "SELECT * FROM usuario WHERE username = %s"
+        resultados = safe_execute(query, (username,), fetch=True)
+        return resultados[0] if resultados else None
+    except Exception as e:
+        print(f"[ERROR obtener_usuario_por_username] {e}")
+        return None
 
 
 def obtener_usuario_por_id(user_id):
@@ -73,9 +82,12 @@ def obtener_usuario_por_id(user_id):
     Returns:
         tuple: Datos del usuario.
     """
-    query ="SELECT * FROM usuarios WHERE id = %s"
-    params =(user_id,)
-    return safe_execute(query, params, fetch=True) or []
+    try:
+        query = "SELECT * FROM usuario WHERE id = %s"
+        return safe_execute(query, (user_id,), fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_usuario_por_id] {e}")
+        return []
 
 
 def actualizar_usuario(user_id, new_data):
@@ -89,17 +101,20 @@ def actualizar_usuario(user_id, new_data):
     Returns:
         None
     """
-
-    query ="""
-                UPDATE usuarios
-                SET username = %s, password = %s, rol = %s
-                WHERE id = %s
-            """
-    params =(
-                new_data["username"], new_data["password"],
-                new_data["rol"], user_id
-            )
-    return safe_execute(query, params)
+    try:
+        query = """
+            UPDATE usuario
+            SET username = %s, password = %s, rol = %s
+            WHERE id = %s
+        """
+        params = (
+            new_data["username"], new_data["password"],
+            new_data["rol"], user_id
+        )
+        return safe_execute(query, params)
+    except Exception as e:
+        print(f"[ERROR actualizar_usuario] {e}")
+        return None
 
 
 def eliminar_usuario(user_id):
@@ -113,7 +128,9 @@ def eliminar_usuario(user_id):
     Returns:
         None
     """
-    query ="DELETE FROM usuarios WHERE id = %s"
-    params =(user_id,)
-    return safe_execute(query, params)
-
+    try:
+        query = "DELETE FROM usuario WHERE id = %s"
+        return safe_execute(query, (user_id,))
+    except Exception as e:
+        print(f"[ERROR eliminar_usuario] {e}")
+        return None
