@@ -1,7 +1,4 @@
-
--- =========================
--- MODELO RELACIONAL NORMALIZADO (FINAL)
--- =========================
+CREATE DATABASE colombiano_coma_contento;
 
 DROP TABLE IF EXISTS facturar, detallar, ofrecer, contener,
     plato_franja_horaria, carta, venta, plato, ingrediente, unidad_medida,
@@ -17,7 +14,8 @@ CREATE TABLE unidad_medida (
 CREATE TABLE ingrediente (
     id_ingrediente SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(100) NOT NULL,
-    id_unidad_medida_fk INTEGER NOT NULL REFERENCES unidad_medida(id_unidad_medida)
+    id_unidad_medida_fk INTEGER NOT NULL,
+    FOREIGN KEY (id_unidad_medida_fk) REFERENCES unidad_medida(id_unidad_medida)
 );
 
 -- Tabla: region
@@ -53,9 +51,12 @@ CREATE TABLE plato (
     foto TEXT,
     precio NUMERIC(10,2) NOT NULL CHECK (precio > 0),
     disponible BOOLEAN DEFAULT TRUE,
-    id_region_fk INTEGER NOT NULL REFERENCES region(id_region),
-    id_categoria_fk INTEGER NOT NULL REFERENCES categoria(id_categoria),
-    id_nivel_complejidad_fk INTEGER NOT NULL REFERENCES nivel_complejidad(id_nivel_complejidad)
+    id_region_fk INTEGER NOT NULL,
+    id_categoria_fk INTEGER NOT NULL,
+    id_nivel_complejidad_fk INTEGER NOT NULL,
+    FOREIGN KEY (id_region_fk) REFERENCES region(id_region),
+    FOREIGN KEY (id_categoria_fk) REFERENCES categoria(id_categoria),
+    FOREIGN KEY (id_nivel_complejidad_fk) REFERENCES nivel_complejidad(id_nivel_complejidad)
 );
 
 -- Tabla: carta
@@ -68,41 +69,50 @@ CREATE TABLE carta (
 
 -- Tabla: detallar (plato en carta)
 CREATE TABLE detallar (
-    id_carta_fk INTEGER NOT NULL REFERENCES carta(id_carta),
-    id_plato_fk INTEGER NOT NULL REFERENCES plato(id_plato),
-    PRIMARY KEY (id_carta_fk, id_plato_fk)
+    id_carta_fk INTEGER NOT NULL,
+    id_plato_fk INTEGER NOT NULL,
+    PRIMARY KEY (id_carta_fk, id_plato_fk),
+    FOREIGN KEY (id_carta_fk) REFERENCES carta(id_carta),
+    FOREIGN KEY (id_plato_fk) REFERENCES plato(id_plato)
 );
 
 -- Tabla: ofrecer (plato en franja)
 CREATE TABLE ofrecer (
-    id_franja_horaria INTEGER NOT NULL REFERENCES franja_horaria(id_franja_horaria),
-    id_plato INTEGER NOT NULL REFERENCES plato(id_plato),
-    PRIMARY KEY (id_franja_horaria, id_plato)
+    id_franja_horaria_fk INTEGER NOT NULL,
+    id_plato_fk INTEGER NOT NULL,
+    PRIMARY KEY (id_franja_horaria_fk, id_plato_fk),
+    FOREIGN KEY (id_franja_horaria_fk) REFERENCES franja_horaria(id_franja_horaria),
+    FOREIGN KEY (id_plato_fk) REFERENCES plato(id_plato)
 );
 
 -- Tabla: venta
 CREATE TABLE venta (
     id_venta SERIAL PRIMARY KEY NOT NULL,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    id_franja_horaria_fk INTEGER NOT NULL REFERENCES franja_horaria(id_franja_horaria)
+    id_franja_horaria_fk INTEGER NOT NULL,
+    FOREIGN KEY (id_franja_horaria_fk) REFERENCES franja_horaria(id_franja_horaria)
 );
 
 -- Tabla: facturar (detalle de venta)
 CREATE TABLE facturar (
-    id_venta_fk INTEGER NOT NULL REFERENCES venta(id_venta),
-    id_plato_fk INTEGER NOT NULL REFERENCES plato(id_plato),
+    id_venta_fk INTEGER NOT NULL,
+    id_plato_fk INTEGER NOT NULL,
     cantidad INTEGER NOT NULL CHECK (cantidad > 0),
     precio_unitario NUMERIC(10,2) NOT NULL,
-    PRIMARY KEY (id_venta_fk, id_plato_fk)
+    PRIMARY KEY (id_venta_fk, id_plato_fk),
+    FOREIGN KEY (id_venta_fk) REFERENCES venta(id_venta),
+    FOREIGN KEY (id_plato_fk) REFERENCES plato(id_plato)
 );
 
 -- Tabla: contener (ingredientes del plato)
 CREATE TABLE contener (
-    id_plato_fk INTEGER NOT NULL REFERENCES plato(id_plato),
-    id_ingrediente_fk INTEGER NOT NULL REFERENCES ingrediente(id_ingrediente),
+    id_plato_fk INTEGER NOT NULL,
+    id_ingrediente_fk INTEGER NOT NULL,
     cantidad NUMERIC(10,2) NOT NULL,
     breve_descripcion TEXT,
-    PRIMARY KEY (id_plato_fk, id_ingrediente_fk)
+    PRIMARY KEY (id_plato_fk, id_ingrediente_fk),
+    FOREIGN KEY (id_plato_fk) REFERENCES plato(id_plato),
+    FOREIGN KEY (id_ingrediente_fk) REFERENCES ingrediente(id_ingrediente)
 );
 
 -- Tabla: usuario
