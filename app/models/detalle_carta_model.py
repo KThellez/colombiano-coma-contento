@@ -56,6 +56,23 @@ def obtener_platos_de_carta(id_carta):
         print(f"[ERROR obtener_platos_de_carta] {e}")
         return []
 
+def obtener_platos_de_carta_por_region(id_carta, id_region):
+    query = """
+        SELECT p.id_plato, p.nombre, p.precio, p.foto
+        FROM plato p
+        JOIN detallar d ON p.id_plato = d.id_plato_fk
+        WHERE d.id_carta_fk = %s AND p.id_region_fk = %s AND p.disponible = TRUE
+    """
+    return safe_execute(query, (id_carta, id_region), fetch=True) or []
+
+def obtener_platos_de_carta_por_categoria(id_carta, id_categoria):
+    query = """
+        SELECT p.id_plato, p.nombre, p.precio, p.foto
+        FROM plato p
+        JOIN detallar d ON p.id_plato = d.id_plato_fk
+        WHERE d.id_carta_fk = %s AND p.id_categoria_fk = %s AND p.disponible = TRUE
+    """
+    return safe_execute(query, (id_carta, id_categoria), fetch=True) or []
 
 def eliminar_plato_de_carta(id_carta, id_plato):
     """

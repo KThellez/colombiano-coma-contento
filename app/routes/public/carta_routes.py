@@ -3,6 +3,16 @@ from app.models import carta_model, detalle_carta_model, plato_model
 
 public_carta_bp = Blueprint('public_carta', __name__, url_prefix='/cartas')
 
+
+
+@public_carta_bp.route('/inicio')
+def home_public():
+    carta = carta_model.obtener_carta_vigente()
+    if not carta:
+        return render_template('public/404.html', mensaje="No hay carta vigente.")
+    return render_template('public/carta/home_carta.html', carta=carta[0])
+
+
 @public_carta_bp.route('/')
 def listado_cartas_public():
     cartas = carta_model.obtener_cartas()

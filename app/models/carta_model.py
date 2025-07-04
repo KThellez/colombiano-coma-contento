@@ -71,6 +71,16 @@ def obtener_carta_por_id(id_carta):
         return []
 
 
+def obtener_carta_vigente():
+    query = """
+        SELECT * FROM carta
+        WHERE CURRENT_DATE BETWEEN fecha_inicio AND fecha_fin
+        ORDER BY fecha_inicio DESC
+        LIMIT 1
+    """
+    return safe_execute(query, fetch=True)
+
+
 def actualizar_carta(id_carta, nombre, fecha_inicio, fecha_fin):
     """
     Actualiza los datos de una carta existente.

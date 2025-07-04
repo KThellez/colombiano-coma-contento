@@ -24,9 +24,9 @@
         <a class="navbar-item" href="{{ url_for('private_region.listado_regiones') }}">Regiones</a>
         <a class="navbar-item" href="{{ url_for('private_usuario.listado_usuarios') }}">Usuarios</a>
       {% else %}
-        <a class="navbar-item" href="{{ url_for('public_carta.listado_cartas_public') }}">Cartas</a>
-        <a class="navbar-item" href="{{ url_for('public_plato.listado_platos_public') }}">Platos</a>
-        <a class="navbar-item" href="{{ url_for('public_region.listado_regiones_public') }}">Regiones</a>
+        <a class="navbar-item" href="{{ url_for('public_carta.home_public') }}">Carta</a>
+        <a class="navbar-item" href="{{ url_for('public_carrito.ver_carrito') }}">Carrito</a>
+        <a class="navbar-item" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
       {% endif %}
       </div>
     </div>

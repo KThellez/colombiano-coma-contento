@@ -25,7 +25,7 @@ def asignar_franja_a_plato(id_plato, id_franja):
     """
     try:
         query = """
-            INSERT INTO ofrecer (id_plato, id_franja_horaria)
+            INSERT INTO ofrecer (id_plato_fk, id_franja_horaria_fk)
             VALUES (%s, %s)
         """
         return safe_execute(query, (id_plato, id_franja))
@@ -48,8 +48,8 @@ def obtener_franjas_de_plato(id_plato):
         query = """
             SELECT f.id_franja_horaria, f.nombre
             FROM franja_horaria f
-            JOIN ofrecer o ON f.id_franja_horaria = o.id_franja_horaria
-            WHERE o.id_plato = %s
+            JOIN ofrecer o ON f.id_franja_horaria = o.id_franja_horaria_fk
+            WHERE o.id_plato_fk = %s
         """
         return safe_execute(query, (id_plato,), fetch=True) or []
     except Exception as e:
@@ -71,7 +71,7 @@ def eliminar_franja_de_plato(id_plato, id_franja):
     try:
         query = """
             DELETE FROM ofrecer
-            WHERE id_plato = %s AND id_franja_horaria = %s
+            WHERE id_plato_fk = %s AND id_franja_horaria_fk = %s
         """
         return safe_execute(query, (id_plato, id_franja))
     except Exception as e:
