@@ -9,45 +9,45 @@ DROP TABLE IF EXISTS facturar, detallar, ofrecer, contener,
 
 -- Tabla: unidad_medida
 CREATE TABLE unidad_medida (
-    id_unidad_medida SERIAL PRIMARY KEY,
+    id_unidad_medida SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(50) NOT NULL
 );
 
 -- Tabla: ingrediente
 CREATE TABLE ingrediente (
-    id_ingrediente SERIAL PRIMARY KEY,
+    id_ingrediente SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     id_unidad_medida_fk INTEGER NOT NULL REFERENCES unidad_medida(id_unidad_medida)
 );
 
 -- Tabla: region
 CREATE TABLE region (
-    id_region SERIAL PRIMARY KEY,
+    id_region SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     encargado VARCHAR(100) NOT NULL
 );
 
 -- Tabla: categoria
 CREATE TABLE categoria (
-    id_categoria SERIAL PRIMARY KEY,
+    id_categoria SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(100) NOT NULL
 );
 
 -- Tabla: nivel_complejidad
 CREATE TABLE nivel_complejidad (
-    id_nivel_complejidad SERIAL PRIMARY KEY,
+    id_nivel_complejidad SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(50) NOT NULL
 );
 
 -- Tabla: franja_horaria
 CREATE TABLE franja_horaria (
-    id_franja_horaria SERIAL PRIMARY KEY,
+    id_franja_horaria SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(50) NOT NULL
 );
 
 -- Tabla: plato
 CREATE TABLE plato (
-    id_plato SERIAL PRIMARY KEY,
+    id_plato SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
     foto TEXT,
@@ -60,7 +60,7 @@ CREATE TABLE plato (
 
 -- Tabla: carta
 CREATE TABLE carta (
-    id_carta SERIAL PRIMARY KEY,
+    id_carta SERIAL PRIMARY KEY NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL
@@ -82,7 +82,7 @@ CREATE TABLE ofrecer (
 
 -- Tabla: venta
 CREATE TABLE venta (
-    id_venta SERIAL PRIMARY KEY,
+    id_venta SERIAL PRIMARY KEY NOT NULL,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     id_franja_horaria_fk INTEGER NOT NULL REFERENCES franja_horaria(id_franja_horaria)
 );
@@ -107,7 +107,7 @@ CREATE TABLE contener (
 
 -- Tabla: usuario
 CREATE TABLE usuario (
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     password TEXT NOT NULL,
     rol VARCHAR(20) DEFAULT 'cliente' CHECK (rol IN ('cliente', 'admin'))
