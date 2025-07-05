@@ -28,7 +28,7 @@ def crear_region():
         return redirect(url_for('private_region.listado_regiones'))
     return render_template('private/region/crear_region.html')
 
-@private_region_bp.route('/editar/<int:id>', methods=['GET', 'POST'])
+@private_region_bp.route('/editar/<string:id>', methods=['GET', 'POST'])
 def editar_region(id):
     region = region_model.obtener_region_por_id(id)
     if not region:
@@ -42,14 +42,14 @@ def editar_region(id):
 
     return render_template('private/region/editar_region.html', region=region)
 
-@private_region_bp.route('/detalle/<int:id>')
+@private_region_bp.route('/detalle/<string:id>')
 def detalle_region(id):
     region = region_model.obtener_region_por_id(id)
     if not region:
         return redirect(url_for('private_region.listado_regiones'))
     return render_template('private/region/detalle_region.html', region=region)
 
-@private_region_bp.route('/eliminar/<int:id>')
+@private_region_bp.route('/eliminar/<string:id>')
 def eliminar_region(id):
     region_model.eliminar_region(id)
     return redirect(url_for('private_region.listado_regiones'))

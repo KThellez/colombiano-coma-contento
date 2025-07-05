@@ -1,36 +1,36 @@
-{% extends 'base.html' %}
-
-{% block title %}Listado de Usuarios{% endblock %}
-
-{% block content %}
-<h1 class="title">Listado de Usuarios</h1>
-
-<a href="{{ url_for('private_usuario.crear_usuario') }}" class="button is-primary mb-3">
-  Crear Nuevo Usuario
-</a>
-
-<table class="table is-striped is-fullwidth">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Username</th>
-      <th>Rol</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for usuario in usuarios %}
-    <tr>
-      <td>{{ usuario[0] }}</td>
-      <td>{{ usuario[1] }}</td>
-      <td>{{ usuario[3] }}</td>
-      <td>
-        <a href="{{ url_for('private_usuario.detalle_usuario', id=usuario[0]) }}" class="button is-small is-info">Ver</a>
-        <a href="{{ url_for('private_usuario.editar_usuario', id=usuario[0]) }}" class="button is-small is-warning">Editar</a>
-        <a href="{{ url_for('private_usuario.eliminar_usuario', id=usuario[0]) }}" class="button is-small is-danger">Eliminar</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Listado de Usuarios{% endblock %}
+
+{% block content %}
+<h1 class="title">Listado de Usuarios</h1>
+
+<a href="{{ url_for('private_usuario.crear_usuario') }}" class="button is-primary mb-3">
+  Crear Nuevo Usuario
+</a>
+
+<table class="table is-striped is-fullwidth">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for usuario in usuarios %}
+    <tr>
+      <td>{{ usuario[0] }}</td>
+      <td>{{ usuario[1] }}</td>
+      <td>{{ usuario[3] }}</td>
+      <td>
+        <a href="{{ url_for('private_usuario.detalle_usuario', id=usuario[0]) }}" class="button is-small is-info">Ver</a>
+        <a href="{{ url_for('private_usuario.editar_usuario', id=usuario[0]) }}" class="button is-small is-warning">Editar</a>
+        <a href="{{ url_for('private_usuario.eliminar_usuario', id=usuario[0]) }}" class="button is-small is-danger">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

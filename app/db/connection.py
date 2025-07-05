@@ -26,24 +26,31 @@ def get_connection():
         return None
 
 def safe_execute(query, params=None, fetch=False, many=False):
+    conn = None
     try:
         conn = get_connection()
         if not conn:
             return [] if fetch else None
 
-        with conn:
-            with conn.cursor() as cur:
-                if params and many:
-                    cur.executemany(query, params)
-                elif params:
-                    cur.execute(query, params)
-                else:
-                    cur.execute(query)
+        with conn.cursor() as cur:
+            if params and many:
+                cur.executemany(query, params)
+            elif params:
+                cur.execute(query, params)
+            else:
+                cur.execute(query)
 
-                if fetch:
-                    return cur.fetchall()
+            if fetch:
+                result = cur.fetchall()
+            else:
+                result = True
+
+        conn.commit() 
+        return result
     except Exception as e:
         print("Error ejecutando consulta:", e)
+        if conn:
+            conn.rollback()
         return [] if fetch else None
     finally:
         if conn:

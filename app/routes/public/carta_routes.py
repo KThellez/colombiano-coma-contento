@@ -18,7 +18,7 @@ def listado_cartas_public():
     cartas = carta_model.obtener_cartas()
     return render_template('public/carta/listado_cartas_public.html', cartas=cartas)
 
-@public_carta_bp.route('/<int:id>')
+@public_carta_bp.route('/<string:id>')
 def detalle_carta_public(id):
     carta = carta_model.obtener_carta_por_id(id)
     if not carta:

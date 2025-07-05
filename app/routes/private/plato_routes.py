@@ -129,3 +129,6 @@ def detalle_plato(id):
 def eliminar_plato(id):
     plato_model.eliminar_plato(id)
     return redirect(url_for('private_plato.listado_platos'))
+
+
+

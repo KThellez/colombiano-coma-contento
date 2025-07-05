@@ -1,36 +1,36 @@
-{% extends 'base.html' %}
-
-{% block title %}Listado de Platos{% endblock %}
-
-{% block content %}
-<h1 class="title">Listado de Platos</h1>
-
-<a href="{{ url_for('private_plato.crear_plato') }}" class="button is-primary mb-3">
-  Crear Nuevo Plato
-</a>
-
-<table class="table is-striped is-fullwidth">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Precio</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for plato in platos %}
-    <tr>
-      <td>{{ plato[0] }}</td>
-      <td>{{ plato[1] }}</td>
-      <td>${{ plato[4] }}</td>
-      <td>
-        <a href="{{ url_for('private_plato.detalle_plato', id=plato[0]) }}" class="button is-small is-info">Ver</a>
-        <a href="{{ url_for('private_plato.editar_plato', id=plato[0]) }}" class="button is-small is-warning">Editar</a>
-        <a href="{{ url_for('private_plato.eliminar_plato', id=plato[0]) }}" class="button is-small is-danger">Eliminar</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Listado de Platos{% endblock %}
+
+{% block content %}
+<h1 class="title">Listado de Platos</h1>
+
+<a href="{{ url_for('private_plato.crear_plato') }}" class="button is-primary mb-3">
+  Crear Nuevo Plato
+</a>
+
+<table class="table is-striped is-fullwidth">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Precio</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for plato in platos %}
+    <tr>
+      <td>{{ plato[0] }}</td>
+      <td>{{ plato[1] }}</td>
+      <td>${{ plato[4] }}</td>
+      <td>
+        <a href="{{ url_for('private_plato.detalle_plato', id=plato[0]) }}" class="button is-small is-info">Ver</a>
+        <a href="{{ url_for('private_plato.editar_plato', id=plato[0]) }}" class="button is-small is-warning">Editar</a>
+        <a href="{{ url_for('private_plato.eliminar_plato', id=plato[0]) }}" class="button is-small is-danger">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

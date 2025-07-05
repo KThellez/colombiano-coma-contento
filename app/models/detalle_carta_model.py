@@ -5,33 +5,12 @@ NOTA:
     No hay función de actualización ya que modificar un plato en una carta es equivalente a quitarlo y volverlo a agregar.
 
 Funciones incluidas:
-- agregar_plato_a_carta
+- asociar_plato_a_carta
 - obtener_platos_de_carta
 - eliminar_plato_de_carta
 """
 
 from app.db.connection import safe_execute
-
-def agregar_plato_a_carta(id_carta, id_plato):
-    """
-    Asocia un plato a una carta.
-
-    Args:
-        id_carta (int): ID de la carta.
-        id_plato (int): ID del plato.
-
-    Returns:
-        None
-    """
-    try:
-        query = """
-            INSERT INTO detallar (id_carta_fk, id_plato_fk)
-            VALUES (%s, %s)
-        """
-        return safe_execute(query, (id_carta, id_plato))
-    except Exception as e:
-        print(f"[ERROR agregar_plato_a_carta] {e}")
-        return None
 
 
 def obtener_platos_de_carta(id_carta):
@@ -93,4 +72,24 @@ def eliminar_plato_de_carta(id_carta, id_plato):
         return safe_execute(query, (id_carta, id_plato))
     except Exception as e:
         print(f"[ERROR eliminar_plato_de_carta] {e}")
+        return None
+    
+def asociar_plato_a_carta(id_carta, id_plato):
+    try:
+        print(f"[DEBUG asociar_plato_a_carta] Insertando {id_carta} - {id_plato}")
+        query = "INSERT INTO detallar (id_carta_fk, id_plato_fk) VALUES (%s, %s)"
+        params = (id_carta, id_plato)
+        return safe_execute(query, params)
+    except Exception as e:
+        print(f"[ERROR asociar_plato_a_carta] {e} - Carta: {id_carta}, Plato: {id_plato}")
+        return None
+
+
+
+def eliminar_todos_platos_de_carta(id_carta):
+    try:
+        query = "DELETE FROM detallar WHERE id_carta_fk = %s"
+        return safe_execute(query, (id_carta,))
+    except Exception as e:
+        print(f"[ERROR eliminar_todos_platos_de_carta] {e}")
         return None

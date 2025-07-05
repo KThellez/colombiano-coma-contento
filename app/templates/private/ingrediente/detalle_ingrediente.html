@@ -1,15 +1,15 @@
-{% extends 'base.html' %}
-
-{% block title %}Detalle Ingrediente{% endblock %}
-
-{% block content %}
-<h1 class="title">Detalle de Ingrediente</h1>
-
-<table class="table is-fullwidth">
-  <tr><th>ID</th><td>{{ ingrediente[0] }}</td></tr>
-  <tr><th>Nombre</th><td>{{ ingrediente[1] }}</td></tr>
-  <tr><th>Unidad de Medida</th><td>{{ ingrediente[2] }}</td></tr>
-</table>
-
-<a href="{{ url_for('private_ingrediente.listado_ingredientes') }}" class="button is-light">Volver</a>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Detalle Ingrediente{% endblock %}
+
+{% block content %}
+<h1 class="title">Detalle de Ingrediente</h1>
+
+<table class="table is-fullwidth">
+  <tr><th>ID</th><td>{{ ingrediente[0] }}</td></tr>
+  <tr><th>Nombre</th><td>{{ ingrediente[1] }}</td></tr>
+  <tr><th>Unidad de Medida</th><td>{{ ingrediente[2] }}</td></tr>
+</table>
+
+<a href="{{ url_for('private_ingrediente.listado_ingredientes') }}" class="button is-light">Volver</a>
+{% endblock %}

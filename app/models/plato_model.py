@@ -133,6 +133,12 @@ def eliminar_plato(id_plato):
         None
     """
     try:
+        # Eliminar relaciones N:M antes del DELETE en 'plato'
+        safe_execute("DELETE FROM contener WHERE id_plato_fk = %s", (id_plato,))
+        safe_execute("DELETE FROM ofrecer WHERE id_plato_fk = %s", (id_plato,))
+        safe_execute("DELETE FROM detallar WHERE id_plato_fk = %s", (id_plato,))
+
+        # Ahora sí eliminar el plato
         query = "DELETE FROM plato WHERE id_plato = %s"
         return safe_execute(query, (id_plato,))
     except Exception as e:

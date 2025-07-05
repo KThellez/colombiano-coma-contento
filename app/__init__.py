@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from app.routes.private.plato_routes import private_plato_bp
 from app.routes.private.region_routes import private_region_bp
 from app.routes.private.categoria_routes import private_categoria_bp
@@ -58,6 +58,17 @@ def create_app():
 
     # Registrar manejadores de errores
     register_error_handlers(app)
+
+
+    @app.route("/test-codificacion")
+    def test_codificacion():
+        niveles = [
+            (1, "fácil"),
+            (2, "intermedio"),
+            (3, "difícil")
+        ]
+        return render_template("test_utf8.html", niveles=niveles)
+
 
     return app
 

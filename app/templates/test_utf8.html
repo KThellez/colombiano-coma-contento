@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba UTF-8</title>
+</head>
+
+<body>
+  <select>
+    {% for nivel in niveles %}
+    <option value="{{ nivel[0] }}">{{ nivel[1] }}</option>
+    {% endfor %}
+  </select>
+</body>
+
+</html>

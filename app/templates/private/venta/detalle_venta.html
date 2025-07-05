@@ -1,41 +1,41 @@
-{% extends 'base.html' %}
-
-{% block title %}Detalle Venta{% endblock %}
-
-{% block content %}
-<h1 class="title">Detalle de Venta</h1>
-
-<table class="table is-fullwidth">
-  <tr><th>ID Venta</th><td>{{ venta[0] }}</td></tr>
-  <tr><th>Fecha</th><td>{{ venta[1] }}</td></tr>
-  <tr><th>Cliente</th><td>{{ venta[2] }}</td></tr>
-  <tr><th>Total</th><td>${{ venta[3] }}</td></tr>
-</table>
-
-<h2 class="subtitle mt-5">Detalle de Productos</h2>
-
-<table class="table is-fullwidth is-striped">
-  <thead>
-    <tr>
-      <th>ID Plato</th>
-      <th>Nombre</th>
-      <th>Cantidad</th>
-      <th>Precio Unitario</th>
-      <th>Subtotal</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in detalle %}
-    <tr>
-      <td>{{ item[1] }}</td>
-      <td>{{ item[2] }}</td>
-      <td>{{ item[3] }}</td>
-      <td>${{ item[4] }}</td>
-      <td>${{ item[5] }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<a href="{{ url_for('private_venta.listado_ventas') }}" class="button is-light mt-3">Volver</a>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Detalle Venta{% endblock %}
+
+{% block content %}
+<h1 class="title">Detalle de Venta</h1>
+
+<table class="table is-fullwidth">
+  <tr><th>ID Venta</th><td>{{ venta[0] }}</td></tr>
+  <tr><th>Fecha</th><td>{{ venta[1] }}</td></tr>
+  <tr><th>Cliente</th><td>{{ venta[2] }}</td></tr>
+  <tr><th>Total</th><td>${{ venta[3] }}</td></tr>
+</table>
+
+<h2 class="subtitle mt-5">Detalle de Productos</h2>
+
+<table class="table is-fullwidth is-striped">
+  <thead>
+    <tr>
+      <th>ID Plato</th>
+      <th>Nombre</th>
+      <th>Cantidad</th>
+      <th>Precio Unitario</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in detalle %}
+    <tr>
+      <td>{{ item[1] }}</td>
+      <td>{{ item[2] }}</td>
+      <td>{{ item[3] }}</td>
+      <td>${{ item[4] }}</td>
+      <td>${{ item[5] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{{ url_for('private_venta.listado_ventas') }}" class="button is-light mt-3">Volver</a>
+{% endblock %}

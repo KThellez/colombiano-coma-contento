@@ -57,7 +57,8 @@
       <div class="select">
         <select name="nivel_complejidad" required>
           {% for nivel in niveles_complejidad %}
-          <option value="{{ nivel[0] }}" {% if plato and nivel[0] == plato[3] %}selected{% endif %}>{{ nivel[1] }}</option>
+          <option value="{{ nivel[0] }}" {% if plato and nivel[0]==plato[3] %}selected{% endif %}>{{ nivel[1] }}
+          </option>
           {% endfor %}
         </select>
       </div>
@@ -84,7 +85,7 @@
       <div class="select">
         <select name="id_region">
           {% for region in regiones %}
-          <option value="{{ region[0] }}" {% if region[0] == plato[6] %}selected{% endif %}>{{ region[1] }}</option>
+          <option value="{{ region[0] }}" {% if region[0]==plato[6] %}selected{% endif %}>{{ region[1] }}</option>
           {% endfor %}
         </select>
       </div>
@@ -97,7 +98,8 @@
       <div class="select">
         <select name="id_categoria">
           {% for categoria in categorias %}
-          <option value="{{ categoria[0] }}" {% if categoria[0] == plato[7] %}selected{% endif %}>{{ categoria[1] }}</option>
+          <option value="{{ categoria[0] }}" {% if categoria[0]==plato[7] %}selected{% endif %}>{{ categoria[1] }}
+          </option>
           {% endfor %}
         </select>
       </div>
@@ -115,61 +117,61 @@
 </form>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const buscarInput = document.getElementById('buscar-ingrediente');
-  const resultados = document.getElementById('resultados-busqueda');
-  const tabla = document.getElementById('ingredientes-seleccionados').querySelector('tbody');
-  const ingredientesInput = document.getElementById('ingredientes-json');
-  let ingredientesSeleccionados = [];
+  document.addEventListener('DOMContentLoaded', () => {
+    const buscarInput = document.getElementById('buscar-ingrediente');
+    const resultados = document.getElementById('resultados-busqueda');
+    const tabla = document.getElementById('ingredientes-seleccionados').querySelector('tbody');
+    const ingredientesInput = document.getElementById('ingredientes-json');
+    let ingredientesSeleccionados = [];
 
-  buscarInput.addEventListener('input', async () => {
-    const query = buscarInput.value.trim();
-    resultados.innerHTML = '';
-    if (query.length < 2) return;
+    buscarInput.addEventListener('input', async () => {
+      const query = buscarInput.value.trim();
+      resultados.innerHTML = '';
+      if (query.length < 2) return;
 
-    const res = await fetch(`/admin/ingredientes/api/ingredientes?q=${query}`);
-    const data = await res.json();
+      const res = await fetch(`/admin/ingredientes/api/ingredientes?q=${query}`);
+      const data = await res.json();
 
-    data.forEach(ing => {
-      const item = document.createElement('li');
-      item.textContent = `${ing.nombre} (${ing.unidad})`;
-      item.classList.add('is-clickable');
-      item.setAttribute('draggable', 'true');
-      item.dataset.ingrediente = JSON.stringify(ing);
+      data.forEach(ing => {
+        const item = document.createElement('li');
+        item.textContent = `${ing.nombre} (${ing.unidad})`;
+        item.classList.add('is-clickable');
+        item.setAttribute('draggable', 'true');
+        item.dataset.ingrediente = JSON.stringify(ing);
 
-      item.addEventListener('click', () => {
-        agregarIngrediente(ing);
-        resultados.innerHTML = '';
-        buscarInput.value = '';
+        item.addEventListener('click', () => {
+          agregarIngrediente(ing);
+          resultados.innerHTML = '';
+          buscarInput.value = '';
+        });
+
+        item.addEventListener('dragstart', e => {
+          e.dataTransfer.setData('application/json', item.dataset.ingrediente);
+        });
+
+        resultados.appendChild(item);
       });
-
-      item.addEventListener('dragstart', e => {
-        e.dataTransfer.setData('application/json', item.dataset.ingrediente);
-      });
-
-      resultados.appendChild(item);
     });
-  });
 
-  tabla.parentElement.addEventListener('dragover', e => {
-    e.preventDefault();
-  });
+    tabla.parentElement.addEventListener('dragover', e => {
+      e.preventDefault();
+    });
 
-  tabla.parentElement.addEventListener('drop', e => {
-    e.preventDefault();
-    const data = e.dataTransfer.getData('application/json');
-    if (data) {
-      const ingrediente = JSON.parse(data);
-      agregarIngrediente(ingrediente);
-    }
-  });
+    tabla.parentElement.addEventListener('drop', e => {
+      e.preventDefault();
+      const data = e.dataTransfer.getData('application/json');
+      if (data) {
+        const ingrediente = JSON.parse(data);
+        agregarIngrediente(ingrediente);
+      }
+    });
 
-  function agregarIngrediente(ingrediente, cantidad = 1, descripcion = '') {
-    if (ingredientesSeleccionados.find(i => i.id_ingrediente === ingrediente.id_ingrediente)) return;
+    function agregarIngrediente(ingrediente, cantidad = 1, descripcion = '') {
+      if (ingredientesSeleccionados.find(i => i.id_ingrediente === ingrediente.id_ingrediente)) return;
 
-    const tr = document.createElement('tr');
-    tr.id = `ingrediente-fila-${ingrediente.id_ingrediente}`;
-    tr.innerHTML = `
+      const tr = document.createElement('tr');
+      tr.id = `ingrediente-fila-${ingrediente.id_ingrediente}`;
+      tr.innerHTML = `
       <td>${ingrediente.nombre}</td>
       <td><input type="number" step="0.1" min="0.1" value="${cantidad}" class="input cantidad"></td>
       <td>${ingrediente.unidad}</td>
@@ -177,38 +179,39 @@ document.addEventListener('DOMContentLoaded', () => {
       <td><button class="button is-small is-danger">Quitar</button></td>
     `;
 
-    tr.querySelector('button').addEventListener('click', () => {
-      quitarIngrediente(ingrediente.id_ingrediente);
-    });
+      tr.querySelector('button').addEventListener('click', () => {
+        quitarIngrediente(ingrediente.id_ingrediente);
+      });
 
-    tabla.appendChild(tr);
-    ingredientesSeleccionados.push({ ...ingrediente });
-    actualizarJSON();
-  }
+      tabla.appendChild(tr);
+      ingredientesSeleccionados.push({ ...ingrediente });
+      actualizarJSON();
+    }
 
-  function quitarIngrediente(id_ingrediente) {
-    ingredientesSeleccionados = ingredientesSeleccionados.filter(i => i.id_ingrediente !== id_ingrediente);
-    const fila = document.getElementById(`ingrediente-fila-${id_ingrediente}`);
-    if (fila) fila.remove();
-    actualizarJSON();
-  }
+    function quitarIngrediente(id_ingrediente) {
+      ingredientesSeleccionados = ingredientesSeleccionados.filter(i => i.id_ingrediente !== id_ingrediente);
+      const fila = document.getElementById(`ingrediente-fila-${id_ingrediente}`);
+      if (fila) fila.remove();
+      actualizarJSON();
+    }
 
-  function actualizarJSON() {
-    const rows = tabla.querySelectorAll('tr');
-    const datos = Array.from(rows).map((row, index) => ({
-      id_ingrediente: ingredientesSeleccionados[index].id_ingrediente,
-      cantidad: parseFloat(row.querySelector('.cantidad').value),
-      descripcion: row.querySelector('.descripcion').value
-    }));
-    ingredientesInput.value = JSON.stringify(datos);
-  }
+    function actualizarJSON() {
+      const rows = tabla.querySelectorAll('tr');
+      const datos = Array.from(rows).map((row, index) => ({
+        id_ingrediente: ingredientesSeleccionados[index].id_ingrediente,
+        cantidad: parseFloat(row.querySelector('.cantidad').value),
+        descripcion: row.querySelector('.descripcion').value
+      }));
+      ingredientesInput.value = JSON.stringify(datos);
+    }
 
-  // Inicializar ingredientes existentes desde Flask
-  const ingredientesIniciales = {{ ingredientes_existentes | tojson }};
+    // Inicializar ingredientes existentes desde Flask
+    const ingredientesIniciales = {{ ingredientes_existentes | tojson | safe
+  }};
   ingredientesIniciales.forEach(ing => {
     agregarIngrediente(ing, ing.cantidad, ing.breve_descripcion);
   });
-});
+  });
 </script>
 
 {% endblock %}

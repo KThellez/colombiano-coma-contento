@@ -1,40 +1,40 @@
-{% extends 'base.html' %}
-
-{% block title %}Carrito de Compras{% endblock %}
-
-{% block content %}
-<h1 class="title">Tu Carrito</h1>
-
-{% if platos %}
-  <table class="table is-fullwidth is-striped">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Precio</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for plato in platos %}
-      <tr>
-        <td>{{ plato[0] }}</td>
-        <td>{{ plato[1] }}</td>
-        <td>${{ plato[4] }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-
-  <a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-light mt-3">Volver a Platos</a>
-  
-  <a href="{{ url_for('public_carta.listado_cartas_public') }}" class="button is-light mt-3">Volver a Cartas</a>
-  
-  <a href="{{ url_for('public_carrito.finalizar_compra') }}" class="button is-success mt-3">
-    Finalizar Compra
-  </a>
-
-{% else %}
-  <p>No tienes platos en el carrito.</p>
-{% endif %}
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Carrito de Compras{% endblock %}
+
+{% block content %}
+<h1 class="title">Tu Carrito</h1>
+
+{% if platos %}
+  <table class="table is-fullwidth is-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for plato in platos %}
+      <tr>
+        <td>{{ plato[0] }}</td>
+        <td>{{ plato[1] }}</td>
+        <td>${{ plato[4] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+  <a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-light mt-3">Volver a Platos</a>
+  
+  <a href="{{ url_for('public_carta.listado_cartas_public') }}" class="button is-light mt-3">Volver a Cartas</a>
+  
+  <a href="{{ url_for('public_carrito.finalizar_compra') }}" class="button is-success mt-3">
+    Finalizar Compra
+  </a>
+
+{% else %}
+  <p>No tienes platos en el carrito.</p>
+{% endif %}
+{% endblock %}

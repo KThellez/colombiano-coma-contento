@@ -1,28 +1,28 @@
-{% extends 'base.html' %}
-
-{% block title %}Detalle Plato{% endblock %}
-
-{% block content %}
-<h1 class="title">{{ plato[1] }}</h1>
-
-<div class="columns">
-  <div class="column is-half">
-    {% if plato[4] %}
-      <figure class="image">
-        <img src="{{ plato[4] }}" alt="Foto de {{ plato[1] }}">
-      </figure>
-    {% endif %}
-  </div>
-  <div class="column is-half">
-    <p><strong>Descripción:</strong> {{ plato[2] }}</p>
-    <p><strong>Nivel de complejidad:</strong> {{ plato[3] }}</p>
-    <p><strong>Precio de venta:</strong> ${{ plato[5] }}</p>
-  </div>
-</div>
-
-<a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-light mt-3">Volver a Platos</a>
-
-
-
-
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Detalle Plato{% endblock %}
+
+{% block content %}
+<h1 class="title">{{ plato[1] }}</h1>
+
+<div class="columns">
+  <div class="column is-half">
+    {% if plato[4] %}
+      <figure class="image">
+        <img src="{{ plato[4] }}" alt="Foto de {{ plato[1] }}">
+      </figure>
+    {% endif %}
+  </div>
+  <div class="column is-half">
+    <p><strong>Descripci√≥n:</strong> {{ plato[2] }}</p>
+    <p><strong>Nivel de complejidad:</strong> {{ plato[3] }}</p>
+    <p><strong>Precio de venta:</strong> ${{ plato[5] }}</p>
+  </div>
+</div>
+
+<a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-light mt-3">Volver a Platos</a>
+
+
+
+
+{% endblock %}

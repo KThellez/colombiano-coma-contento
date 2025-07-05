@@ -206,7 +206,7 @@ FOR EACH ROW EXECUTE FUNCTION registrar_historial_ingrediente();
 
 CREATE TABLE historial_venta (
     id SERIAL PRIMARY KEY,
-    id_venta id_venta VARCHAR(30),
+    id_venta VARCHAR(30),
     fecha TIMESTAMP,
     id_franja_horaria_fk INTEGER,
     accion VARCHAR(10),
@@ -278,15 +278,21 @@ CREATE OR REPLACE FUNCTION generar_id_carta()
 RETURNS TRIGGER AS $$
 DECLARE
     periodo TEXT := TO_CHAR(NEW.fecha_inicio, 'YYYYMM');
-    consecutivo INT;
+    max_consecutivo TEXT;
+    nuevo_num INT;
 BEGIN
-    -- Contar cuántas cartas hay en ese período
-    SELECT COUNT(*) + 1 INTO consecutivo
+    -- Obtener el último número usado para ese periodo
+    SELECT MAX(SPLIT_PART(id_carta, '-', 3)) INTO max_consecutivo
     FROM carta
     WHERE TO_CHAR(fecha_inicio, 'YYYYMM') = periodo;
 
-    -- Generar el ID personalizado
-    NEW.id := 'CARTA-' || periodo || '-' || LPAD(consecutivo::TEXT, 4, '0');
+    IF max_consecutivo IS NULL THEN
+        nuevo_num := 1;
+    ELSE
+        nuevo_num := max_consecutivo::INT + 1;
+    END IF;
+
+    NEW.id_carta := 'CARTA-' || periodo || '-' || LPAD(nuevo_num::TEXT, 4, '0');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

@@ -1,38 +1,38 @@
-{% extends 'base.html' %}
-
-{% block title %}Listado de Cartas{% endblock %}
-
-{% block content %}
-<h1 class="title">Listado de Cartas</h1>
-
-<a href="{{ url_for('private_carta.crear_carta') }}" class="button is-primary mb-3">
-  Crear Nueva Carta
-</a>
-
-<table class="table is-striped is-fullwidth">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Fecha Inicio</th>
-      <th>Fecha Fin</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for carta in cartas %}
-    <tr>
-      <td>{{ carta[0] }}</td>
-      <td>{{ carta[1] }}</td>
-      <td>{{ carta[2] }}</td>
-      <td>{{ carta[3] }}</td>
-      <td>
-        <a href="{{ url_for('private_carta.detalle_carta', id=carta[0]) }}" class="button is-small is-info">Ver</a>
-        <a href="{{ url_for('private_carta.editar_carta', id=carta[0]) }}" class="button is-small is-warning">Editar</a>
-        <a href="{{ url_for('private_carta.eliminar_carta', id=carta[0]) }}" class="button is-small is-danger">Eliminar</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Listado de Cartas{% endblock %}
+
+{% block content %}
+<h1 class="title">Listado de Cartas</h1>
+
+<a href="{{ url_for('private_carta.crear_carta') }}" class="button is-primary mb-3">
+  Crear Nueva Carta
+</a>
+
+<table class="table is-striped is-fullwidth">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Fecha Inicio</th>
+      <th>Fecha Fin</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for carta in cartas %}
+    <tr>
+      <td>{{ carta[0] }}</td>
+      <td>{{ carta[1] }}</td>
+      <td>{{ carta[2] }}</td>
+      <td>{{ carta[3] }}</td>
+      <td>
+        <a href="{{ url_for('private_carta.detalle_carta', id=carta[0]) }}" class="button is-small is-info">Ver</a>
+        <a href="{{ url_for('private_carta.editar_carta', id=carta[0]) }}" class="button is-small is-warning">Editar</a>
+        <a href="{{ url_for('private_carta.eliminar_carta', id=carta[0]) }}" class="button is-small is-danger">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

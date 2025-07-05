@@ -21,7 +21,6 @@ VALUES ('Master', 'pbkdf2:sha256:1000000$qOhsubRV$60bb580f7208152de0e259188fd6be
 --============ INSERTS A==============---
 
 
-
 --=== REACTIVACION DE TRIGGERS ===---
 -- Activar triggers de auditoría e IDs
 ALTER TABLE categoria ENABLE TRIGGER trigger_categoria_auditoria;
