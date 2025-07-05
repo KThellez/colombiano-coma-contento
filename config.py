@@ -9,6 +9,7 @@ DB_CONFIG = {
     "dbname": os.getenv("DB_NAME"),
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
+    "options": os.getenv("DB_OPTIONS")
 }
 
 SECRET_KEY = os.getenv("SECRET_KEY")

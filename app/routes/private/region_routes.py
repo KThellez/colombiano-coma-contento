@@ -12,6 +12,7 @@ def require_login():
         flash('Debes iniciar sesión como administrador.', 'warning')
         return redirect(url_for('auth.login'))
     
+    
 @private_region_bp.route('/')
 def listado_regiones():
     regiones = region_model.obtener_todas_regiones()

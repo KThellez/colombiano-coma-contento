@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for , session, flash
+from flask import Blueprint, render_template, request, redirect, url_for , session, flash, jsonify
 from app.models import ingrediente_model, unidad_medida_model
 
 private_ingrediente_bp = Blueprint('private_ingrediente', __name__, url_prefix='/admin/ingredientes')
@@ -61,3 +61,20 @@ def detalle_ingrediente(id):
 def eliminar_ingrediente(id):
     ingrediente_model.eliminar_ingrediente(id)
     return redirect(url_for('private_ingrediente.listado_ingredientes'))
+
+
+@private_ingrediente_bp.route('/api/ingredientes')
+def buscar_ingredientes():
+    query = request.args.get('q', '').lower()
+    ingredientes = ingrediente_model.obtener_ingredientes()
+    resultado = [
+        {
+            "id_ingrediente": ing[0],
+            "nombre": ing[1],
+            "unidad": ing[2]
+        }
+        for ing in ingredientes if query in ing[1].lower()
+    ]
+    return jsonify(resultado)
+
+

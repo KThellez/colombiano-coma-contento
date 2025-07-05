@@ -33,17 +33,26 @@ def crear_plato(data):
     """
     try:
         query = """
-            INSERT INTO plato (nombre, descripcion, foto, precio, disponible, id_region_fk, id_categoria_fk, id_nivel_complejidad_fk)
-            VALUES (%s, %s, %s, %s, TRUE, %s, %s, %s)
+            INSERT INTO plato (
+                nombre, descripcion, id_nivel_complejidad_fk,
+                foto, precio, id_region_fk, id_categoria_fk
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+            RETURNING id_plato
         """
         params = (
-            data["nombre"], data["descripcion"], data["foto"], data["precio"],
-            data["id_region_fk"], data["id_categoria_fk"], data["id_nivel_complejidad_fk"]
+            data["nombre"],
+            data["descripcion"],
+            data["id_nivel_complejidad_fk"],  
+            data["foto"],
+            data["precio"],                 
+            data["id_region_fk"],            
+            data["id_categoria_fk"]         
         )
-        return safe_execute(query, params)
+        return safe_execute(query, params, fetch=True)
     except Exception as e:
         print(f"[ERROR crear_plato] {e}")
-        return None
+        print(f"[ERROR crear_plato] {e}")
+        raise
 
 
 def obtener_platos():
@@ -54,7 +63,7 @@ def obtener_platos():
         list: Lista de platos.
     """
     try:
-        query = "SELECT * FROM plato"
+        query = "SELECT * FROM plato ORDER BY id_plato"
         return safe_execute(query, fetch=True) or []
     except Exception as e:
         print(f"[ERROR obtener_platos] {e}")

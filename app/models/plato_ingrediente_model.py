@@ -48,17 +48,17 @@ def obtener_ingredientes_de_plato(id_plato):
     """
     try:
         query = """
-            SELECT i.id_ingrediente, i.nombre, c.cantidad, um.nombre AS unidad_medida, c.breve_descripcion
-            FROM ingrediente i
-            JOIN unidad_medida um ON i.id_unidad_medida_fk = um.id_unidad_medida
-            JOIN contener c ON i.id_ingrediente = c.id_ingrediente_fk
+            SELECT i.id_ingrediente, i.nombre, u.nombre AS unidad, c.cantidad, c.breve_descripcion
+            FROM contener c
+            JOIN ingrediente i ON c.id_ingrediente_fk = i.id_ingrediente
+            JOIN unidad_medida u ON i.id_unidad_medida_fk = u.id_unidad_medida
             WHERE c.id_plato_fk = %s
         """
         return safe_execute(query, (id_plato,), fetch=True) or []
     except Exception as e:
         print(f"[ERROR obtener_ingredientes_de_plato] {e}")
         return []
-
+        
 
 def eliminar_ingrediente_de_plato(id_plato, id_ingrediente):
     """

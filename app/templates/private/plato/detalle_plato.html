@@ -13,8 +13,8 @@
   <tr><th>Foto</th>
     <td>
       {% if plato[4] %}
-        <img src="{{ plato[4] }}" style="max-width: 200px;">
-      {% else %}
+        <img src="{{ url_for('static', filename='uploads/' ~ plato[4]) }}" alt="Foto de {{ plato[1] }}" style="max-width: 200px;">
+      {% endif %}
         No disponible
       {% endif %}
     </td>

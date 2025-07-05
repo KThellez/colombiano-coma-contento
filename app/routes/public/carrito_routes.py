@@ -50,7 +50,7 @@ def finalizar_compra():
     if id_venta is None:
         return render_template('public/carrito/error_finalizar.html', mensaje="Error creando la venta.")
 
-    # 🔁 Agrupar platos y contar repeticiones
+    # Agrupar platos y contar repeticiones
     conteo_platos = Counter(carrito)
 
     platos_factura = []

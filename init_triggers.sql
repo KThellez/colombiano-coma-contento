@@ -1,6 +1,6 @@
 
 -- ==============================================
--- HISTORIAL Y TRIGGERS DE AUDITORÍA ACTUALIZADOS
+-- HISTORIAL , TRIGGERS DE AUDITORÍA E IDS
 -- Para: categoria, carta, plato, region,
 --       usuario, ingrediente, venta
 -- ==============================================
@@ -39,7 +39,7 @@ FOR EACH ROW EXECUTE FUNCTION registrar_historial_categoria();
 
 CREATE TABLE historial_carta (
     id SERIAL PRIMARY KEY,
-    id_carta INTEGER,
+    id_carta VARCHAR(20),
     nombre VARCHAR(100),
     fecha_inicio DATE,
     fecha_fin DATE,
@@ -77,7 +77,7 @@ CREATE TABLE historial_plato (
     foto TEXT,
     precio NUMERIC(10,2),
     disponible BOOLEAN,
-    id_region_fk INTEGER,
+    id_region_fk VARCHAR(8),
     id_categoria_fk INTEGER,
     id_nivel_complejidad_fk INTEGER,
     accion VARCHAR(10),
@@ -112,7 +112,7 @@ FOR EACH ROW EXECUTE FUNCTION registrar_historial_plato();
 
 CREATE TABLE historial_region (
     id SERIAL PRIMARY KEY,
-    id_region INTEGER,
+    id_region VARCHAR(8),
     nombre VARCHAR(100),
     encargado VARCHAR(100),
     accion VARCHAR(10),
@@ -206,7 +206,7 @@ FOR EACH ROW EXECUTE FUNCTION registrar_historial_ingrediente();
 
 CREATE TABLE historial_venta (
     id SERIAL PRIMARY KEY,
-    id_venta INTEGER,
+    id_venta id_venta VARCHAR(30),
     fecha TIMESTAMP,
     id_franja_horaria_fk INTEGER,
     accion VARCHAR(10),
@@ -231,3 +231,105 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_venta_auditoria
 AFTER INSERT OR UPDATE OR DELETE ON venta
 FOR EACH ROW EXECUTE FUNCTION registrar_historial_venta();
+
+
+
+
+-- ========== TRIGGERS DE IDS ==========
+
+-- ========== 1. ID VENTA ==========
+CREATE OR REPLACE FUNCTION generar_id_venta()
+RETURNS TRIGGER AS $$
+DECLARE
+    fecha_actual TEXT := TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDD');
+    franja TEXT;
+    consecutivo INT;
+BEGIN
+    -- Obtener el nombre de la franja (desayuno, almuerzo, cena)
+    SELECT CASE
+        WHEN LOWER(nombre) LIKE '%des%' THEN 'DES'
+        WHEN LOWER(nombre) LIKE '%alm%' THEN 'ALM'
+        WHEN LOWER(nombre) LIKE '%cen%' THEN 'CEN'
+        ELSE 'XX'
+    END INTO franja
+    FROM franja_horaria
+    WHERE id_franja_horaria = NEW.id_franja_horaria_fk;
+
+    -- Obtener cuántas ventas existen hoy en esa franja
+    SELECT COUNT(*) + 1 INTO consecutivo
+    FROM venta
+    WHERE TO_CHAR(fecha, 'YYYYMMDD') = fecha_actual
+      AND id_franja_horaria_fk = NEW.id_franja_horaria_fk;
+
+    NEW.id := 'VENTA-' || fecha_actual || '-' || franja || '-' || LPAD(consecutivo::TEXT, 4, '0');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_generar_id_venta
+BEFORE INSERT ON venta
+FOR EACH ROW
+EXECUTE FUNCTION generar_id_venta();
+
+-- ========== 1. ID CARTA ==========
+
+CREATE OR REPLACE FUNCTION generar_id_carta()
+RETURNS TRIGGER AS $$
+DECLARE
+    periodo TEXT := TO_CHAR(NEW.fecha_inicio, 'YYYYMM');
+    consecutivo INT;
+BEGIN
+    -- Contar cuántas cartas hay en ese período
+    SELECT COUNT(*) + 1 INTO consecutivo
+    FROM carta
+    WHERE TO_CHAR(fecha_inicio, 'YYYYMM') = periodo;
+
+    -- Generar el ID personalizado
+    NEW.id := 'CARTA-' || periodo || '-' || LPAD(consecutivo::TEXT, 4, '0');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_id_carta
+BEFORE INSERT ON carta
+FOR EACH ROW
+EXECUTE FUNCTION generar_id_carta();
+
+
+-- ========== 1. ID REGION ==========
+CREATE OR REPLACE FUNCTION generar_id_region()
+RETURNS TRIGGER AS $$
+DECLARE
+    base_id TEXT;
+    nuevo_id TEXT;
+    contador INT := 1;
+BEGIN
+    -- Solo generar si no se proporciona manualmente
+    IF NEW.id_region IS NULL OR TRIM(NEW.id_region) = '' THEN
+        -- Construir base con dos primeras letras en minúsculas
+        base_id := regexp_replace(LOWER(LEFT(NEW.nombre, 2)), '[^a-z]', '', 'g') || '_co';
+        nuevo_id := base_id;
+
+        -- Buscar si ya existe el ID base o incrementado
+        WHILE EXISTS (
+            SELECT 1 FROM region WHERE id_region = nuevo_id
+        ) LOOP
+            nuevo_id := base_id || '_' || LPAD(contador::TEXT, 3, '0');
+            contador := contador + 1;
+        END LOOP;
+
+        -- Asignar ID final
+        NEW.id_region := nuevo_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_generar_id_region
+BEFORE INSERT ON region
+FOR EACH ROW
+EXECUTE FUNCTION generar_id_region();
