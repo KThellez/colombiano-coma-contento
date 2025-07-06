@@ -48,16 +48,18 @@ CREATE TABLE franja_horaria (
 CREATE TABLE plato (
     id_plato INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT,
-    foto TEXT,
+    descripcion TEXT NOT NULL,
+    foto TEXT NOT NULL,
     precio NUMERIC(10,2) NOT NULL CHECK (precio > 0),
-    disponible BOOLEAN DEFAULT TRUE,
+    disponible BOOLEAN DEFAULT TRUE NOT NULL,
     id_region_fk VARCHAR(8) NOT NULL,
     id_categoria_fk INTEGER NOT NULL,
     id_nivel_complejidad_fk INTEGER NOT NULL,
     FOREIGN KEY (id_region_fk) REFERENCES region(id_region),
     FOREIGN KEY (id_categoria_fk) REFERENCES categoria(id_categoria),
     FOREIGN KEY (id_nivel_complejidad_fk) REFERENCES nivel_complejidad(id_nivel_complejidad)
+
+
 );
 
 -- Tabla: carta
@@ -123,3 +125,5 @@ CREATE TABLE usuario (
     password TEXT NOT NULL,
     rol VARCHAR(20) DEFAULT 'cliente' CHECK (rol IN ('cliente', 'admin'))
 );
+
+
