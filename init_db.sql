@@ -13,7 +13,7 @@ CREATE TABLE unidad_medida (
 
 -- Tabla: ingrediente
 CREATE TABLE ingrediente (
-    id_ingrediente INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_ingrediente SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     id_unidad_medida_fk INTEGER NOT NULL,
     FOREIGN KEY (id_unidad_medida_fk) REFERENCES unidad_medida(id_unidad_medida)
@@ -28,7 +28,7 @@ CREATE TABLE region (
 
 -- Tabla: categoria
 CREATE TABLE categoria (
-    id_categoria INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_categoria SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE franja_horaria (
 
 -- Tabla: plato 
 CREATE TABLE plato (
-    id_plato INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_plato SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT NOT NULL,
     foto TEXT NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE ofrecer (
 -- Tabla: venta
 CREATE TABLE venta (
     id_venta VARCHAR(30) PRIMARY KEY NOT NULL,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     id_franja_horaria_fk INTEGER NOT NULL,
     FOREIGN KEY (id_franja_horaria_fk) REFERENCES franja_horaria(id_franja_horaria)
 );
@@ -112,7 +112,7 @@ CREATE TABLE contener (
     id_plato_fk INTEGER NOT NULL,
     id_ingrediente_fk INTEGER NOT NULL,
     cantidad NUMERIC(10,2) NOT NULL,
-    breve_descripcion TEXT,
+    breve_descripcion TEXT NOT NULL,
     PRIMARY KEY (id_plato_fk, id_ingrediente_fk),
     FOREIGN KEY (id_plato_fk) REFERENCES plato(id_plato),
     FOREIGN KEY (id_ingrediente_fk) REFERENCES ingrediente(id_ingrediente)
@@ -120,7 +120,7 @@ CREATE TABLE contener (
 
 -- Tabla: usuario
 CREATE TABLE usuario (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password TEXT NOT NULL,
     rol VARCHAR(20) DEFAULT 'cliente' CHECK (rol IN ('cliente', 'admin'))

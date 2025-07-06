@@ -19,7 +19,7 @@ def listado_ventas():
     #ventas = obtener_ventas_fake()
     return render_template('private/venta/listado_ventas.html', ventas=ventas)
 
-@private_venta_bp.route('/detalle/<int:id>')
+@private_venta_bp.route('/detalle/<string:id>')
 def detalle_venta(id):
     venta = venta_model.obtener_venta_por_id(id)
     if not venta:
@@ -28,7 +28,7 @@ def detalle_venta(id):
     detalle = detalle_venta_model.obtener_detalle_venta(id)
     return render_template('private/venta/detalle_venta.html', venta=venta, detalle=detalle)
 
-@private_venta_bp.route('/eliminar/<int:id>')
+@private_venta_bp.route('/eliminar/<string:id>')
 def eliminar_venta(id):
     venta_model.eliminar_venta(id)
     return redirect(url_for('private_venta.listado_ventas'))

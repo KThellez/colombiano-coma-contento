@@ -59,7 +59,7 @@ def finalizar_compra():
     for plato_id, cantidad in conteo_platos.items():
         plato = plato_model.obtener_plato_por_id(plato_id)
         if plato:
-            precio_unitario = plato[0][5]
+            precio_unitario = float(plato[0][4]) 
             detalle_venta_model.crear_detalle_venta(
                 id_venta, plato_id, cantidad, precio_unitario
             )
@@ -89,12 +89,12 @@ def finalizar_compra():
 
 
 
-@public_carrito_bp.route('/factura/<int:id_venta>/ver')
+@public_carrito_bp.route('/factura/<string:id_venta>/ver')
 def ver_factura_pdf(id_venta):
     return _generar_factura_pdf(id_venta, disposition='inline')
 
 
-@public_carrito_bp.route('/factura/<int:id_venta>/descargar')
+@public_carrito_bp.route('/factura/<string:id_venta>/descargar')
 def descargar_factura_pdf(id_venta):
     return _generar_factura_pdf(id_venta, disposition='attachment')
 

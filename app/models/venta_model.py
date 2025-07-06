@@ -27,9 +27,9 @@ def registrar_venta(franja_horaria_id):
     """
     try:
         query = """
-            INSERT INTO venta (franja_horaria_id)
+            INSERT INTO venta (id_franja_horaria_fk)
             VALUES (%s)
-            RETURNING id
+            RETURNING id_venta
         """
         return safe_execute(query, (franja_horaria_id,), fetch=True)
     except Exception as e:
@@ -49,9 +49,9 @@ def crear_venta(franja_horaria_id):
     """
     try:
         query = """
-            INSERT INTO venta (fecha, franja_horaria_id)
+            INSERT INTO venta (fecha, id_franja_horaria_fk)
             VALUES (NOW(), %s)
-            RETURNING id
+            RETURNING id_venta
         """
         result = safe_execute(query, (franja_horaria_id,), fetch=True)
         return result[0][0] if result else None
@@ -69,9 +69,9 @@ def obtener_ventas():
     """
     try:
         query = """
-            SELECT v.id, v.fecha, f.nombre AS franja
+            SELECT v.id_venta, v.fecha, f.nombre AS franja
             FROM venta v
-            JOIN franja_horaria f ON v.franja_horaria_id = f.id
+            JOIN franja_horaria f ON v.id_franja_horaria_fk = f.id_franja_horaria
         """
         return safe_execute(query, fetch=True) or []
     except Exception as e:
@@ -90,7 +90,7 @@ def obtener_venta_por_id(id_venta):
         tuple: Datos de la venta.
     """
     try:
-        query = "SELECT * FROM venta WHERE id = %s"
+        query = "SELECT * FROM venta WHERE id_venta = %s"
         return safe_execute(query, (id_venta,), fetch=True) or []
     except Exception as e:
         print(f"[ERROR obtener_venta_por_id] {e}")
@@ -108,7 +108,7 @@ def eliminar_venta(id_venta):
         None
     """
     try:
-        query = "DELETE FROM venta WHERE id = %s"
+        query = "DELETE FROM venta WHERE id_venta = %s"
         return safe_execute(query, (id_venta,))
     except Exception as e:
         print(f"[ERROR eliminar_venta] {e}")
@@ -117,19 +117,8 @@ def eliminar_venta(id_venta):
 # --- DASHBOARD FUNCTIONS ---
 
 def ventas_por_mes():
-    """
-    Suma de ventas agrupadas por mes.
-    """
     try:
-        query = """
-            SELECT
-                TO_CHAR(fecha, 'YYYY-MM') AS mes,
-                SUM(dv.cantidad * dv.precio_unitario) AS total
-            FROM venta v
-            JOIN detalle_venta dv ON v.id = dv.id_venta
-            GROUP BY mes
-            ORDER BY mes
-        """
+        query = "SELECT * FROM venta_may ORDER BY mes"
         return safe_execute(query, fetch=True) or []
     except Exception as e:
         print(f"[ERROR ventas_por_mes] {e}")
@@ -138,18 +127,10 @@ def ventas_por_mes():
 
 def ventas_por_anio():
     """
-    Suma de ventas agrupadas por año.
+    Suma de ventas agrupadas por año usando vista materializada.
     """
     try:
-        query = """
-            SELECT
-                EXTRACT(YEAR FROM fecha) AS anio,
-                SUM(dv.cantidad * dv.precio_unitario) AS total
-            FROM venta v
-            JOIN detalle_venta dv ON v.id = dv.id_venta
-            GROUP BY anio
-            ORDER BY anio
-        """
+        query = "SELECT * FROM venta_anual_mat ORDER BY anio"
         return safe_execute(query, fetch=True) or []
     except Exception as e:
         print(f"[ERROR ventas_por_anio] {e}")
@@ -164,9 +145,9 @@ def top_platos():
         query = """
             SELECT
                 p.nombre,
-                SUM(dv.cantidad) AS cantidad
-            FROM detalle_venta dv
-            JOIN plato p ON dv.id_plato = p.id
+                SUM(f.cantidad) AS cantidad
+            FROM facturar f
+            JOIN plato p ON f.id_plato_fk = p.id_plato
             GROUP BY p.nombre
             ORDER BY cantidad DESC
             LIMIT 5
@@ -185,10 +166,10 @@ def ventas_por_region():
         query = """
             SELECT
                 r.nombre,
-                SUM(dv.cantidad * dv.precio_unitario) AS total
+                SUM(f.cantidad * f.precio_unitario) AS total
             FROM region r
-            JOIN plato p ON p.id_region = r.id
-            JOIN detalle_venta dv ON dv.id_plato = p.id
+            JOIN plato p ON p.id_region_fk = r.id_region
+            JOIN facturar f ON f.id_plato_fk = p.id_plato
             GROUP BY r.nombre
             ORDER BY total DESC
         """
@@ -205,17 +186,17 @@ def ventas_por_categoria():
     try:
         query = """
             SELECT
-                c.nombre,
-                SUM(dv.cantidad * dv.precio_unitario) AS total
-            FROM categoria c
-            JOIN plato p ON p.id_categoria = c.id
-            JOIN detalle_venta dv ON dv.id_plato = p.id
-            GROUP BY c.nombre
-            ORDER BY total DESC
+                p.nombre,
+                SUM(f.cantidad) AS cantidad
+            FROM facturar f
+            JOIN plato p ON f.id_plato_fk = p.id_plato
+            GROUP BY p.nombre
+            ORDER BY cantidad DESC
+            LIMIT 5
         """
         return safe_execute(query, fetch=True) or []
     except Exception as e:
-        print(f"[ERROR ventas_por_categoria] {e}")
+        print(f"[ERROR top_platos] {e}")
         return []
 
 
@@ -226,12 +207,12 @@ def ventas_por_franja():
     try:
         query = """
             SELECT
-                f.nombre,
-                SUM(dv.cantidad * dv.precio_unitario) AS total
-            FROM franja_horaria f
-            JOIN venta v ON v.franja_horaria_id = f.id
-            JOIN detalle_venta dv ON dv.id_venta = v.id
-            GROUP BY f.nombre
+                fh.nombre,
+                SUM(f.cantidad * f.precio_unitario) AS total
+            FROM franja_horaria fh
+            JOIN venta v ON v.id_franja_horaria_fk = fh.id_franja_horaria
+            JOIN facturar f ON f.id_venta_fk = v.id_venta
+            GROUP BY fh.nombre
             ORDER BY total DESC
         """
         return safe_execute(query, fetch=True) or []
