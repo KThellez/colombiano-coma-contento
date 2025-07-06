@@ -1,30 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>{% block title %}Colombiano Coma Contento{% endblock %}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome (opcional para íconos) -->
+  <script src="https://kit.fontawesome.com/a2d06bfa3a.js" crossorigin="anonymous"></script>
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sour+Gummy&display=swap" rel="stylesheet">
+
+
+
 </head>
+
 <body>
-  
-  <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    {% if session.get('rol') == 'admin' %}
-      <a class="navbar-item" href="{{ url_for('public_carta.home_public') }}">
-        Colombiano Coma Contento
-      </a>
-    {% else %}
-      <a class="navbar-item" href="{{ url_for('public_carta.home_public') }}">
-        Colombiano Coma Contento
-      </a>
-    {% endif %}
 
-  </div>
-
-  <div class="navbar-menu">
-    <div class="navbar-start">
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
       {% if session.get('rol') == 'admin' %}
+      <a class="navbar-item logo-navbar" href="{{ url_for('public_carta.home_public') }}">
+        Colombiano Coma Contento
+      </a>
+      {% else %}
+      <a class="navbar-item  logo-navbar" href="{{ url_for('public_carta.home_public') }}">
+        Colombiano Coma Contento
+      </a>
+      {% endif %}
+
+    </div>
+
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        {% if session.get('rol') == 'admin' %}
         <a class="navbar-item" href="{{ url_for('private_ingrediente.listado_ingredientes') }}">Ingredientes</a>
         <a class="navbar-item" href="{{ url_for('private_dashboard.dashboard_home') }}">Indicadores</a>
         <a class="navbar-item" href="{{ url_for('private_plato.listado_platos') }}">Platos</a>
@@ -33,29 +52,44 @@
         <a class="navbar-item" href="{{ url_for('private_categoria.listado_categorias') }}">Categoría</a>
         <a class="navbar-item" href="{{ url_for('private_venta.listado_ventas') }}">Ventas</a>
         <a class="navbar-item" href="{{ url_for('private_usuario.listado_usuarios') }}">Usuarios</a>
-      {% else %}
+        {% else %}
         <a class="navbar-item" href="{{ url_for('public_carta.home_public') }}">Carta</a>
         <a class="navbar-item" href="{{ url_for('public_carrito.ver_carrito') }}">Carrito</a>
-      {% endif %}
+        {% endif %}
       </div>
-    </div>
 
-    <div class="navbar-end">
-      <div class="navbar-item">
-        {% if session.get('usuario_id') %}
+      <div class="navbar-end">
+        <div class="navbar-item">
+          {% if session.get('usuario_id') %}
           <div>Hola, {{ session['username'] }}</div>
           <div class="buttons ml-2">
             <a class="button is-light" href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
           </div>
-        {% else %}
+          {% else %}
           <div class="buttons">
             <a class="button is-light" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
           </div>
-        {% endif %}
+          {% endif %}
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
+
+
+  {% if request.path == '/' %}
+  <section class="hero is-fullheight is-background">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-1 texto-con-fondo">
+          Del sabor de una Nación <span> Al gusto de nuestra sazón</span>
+        </h1>
+        <a href="{{ url_for('public_carta.home_public') }}" class="button is-warning is-medium mt-4">
+          Descubre nuestra carta
+        </a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
 
   <section class="section">
     <div class="container">
@@ -67,13 +101,16 @@
 
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    <div class="notification is-light">
-      {% for category, message in messages %}
-        <div class="notification is-{{ category }}">{{ message }}</div>
-      {% endfor %}
+  <div class="container mt-4">
+    {% for category, message in messages %}
+    <div class="notification is-{{ category }}">
+      {{ message }}
     </div>
+    {% endfor %}
+  </div>
   {% endif %}
-{% endwith %}
+  {% endwith %}
 
 </body>
+
 </html>
