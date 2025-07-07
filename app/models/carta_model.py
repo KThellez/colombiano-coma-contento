@@ -36,7 +36,7 @@ def crear_carta(nombre, fecha_inicio, fecha_fin):
         """
         result = safe_execute(insert, (nombre, fecha_inicio, fecha_fin), fetch=True)
         if result:
-            id_carta = result[0][0]
+            id_carta = result[0][0].strip()
             print(f"[SUCCESS] Carta insertada correctamente: {id_carta}")
             return id_carta
         else:
@@ -84,7 +84,7 @@ def obtener_carta_vigente():
     Obtiene la carta actualmente vigente según la fecha del sistema.
 
     Returns:
-        list[tuple]: Carta vigente o lista vacía.
+        tuple: Carta vigente o None.
     """
     try:
         query = """
@@ -93,10 +93,11 @@ def obtener_carta_vigente():
             ORDER BY fecha_inicio DESC
             LIMIT 1
         """
-        return safe_execute(query, fetch=True)
+        resultado = safe_execute(query, fetch=True)
+        return resultado[0] if resultado else None
     except Exception as e:
         print(f"[ERROR obtener_carta_vigente] {e}")
-        return []
+        return None
 
 def actualizar_carta(id_carta, nombre, fecha_inicio, fecha_fin):
     """

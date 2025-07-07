@@ -8,10 +8,12 @@ from app.routes.private.venta_routes import private_venta_bp
 from app.routes.private.usuario_routes import private_usuario_bp
 from app.routes.private.dashboard_routes import private_dashboard_bp
 
+
 from app.routes.public.plato_routes import public_plato_bp
 from app.routes.public.carta_routes import public_carta_bp
 from app.routes.public.region_routes import public_region_bp
 from app.routes.public.carrito_routes import public_carrito_bp
+from app.routes.public.main_routes import main_bp
 
 from app.routes.auth.auth_routes import auth_bp
 
@@ -82,11 +84,14 @@ def register_private_blueprint(app):
     app.register_blueprint(private_usuario_bp)
     app.register_blueprint(private_dashboard_bp)
 
+    
+
 def register_public_blueprint(app):
     app.register_blueprint(public_plato_bp)
     app.register_blueprint(public_carta_bp)
     app.register_blueprint(public_region_bp)
     app.register_blueprint(public_carrito_bp)
+    app.register_blueprint(main_bp)
 
 def register_auth_blueprint(app):
     app.register_blueprint(auth_bp)

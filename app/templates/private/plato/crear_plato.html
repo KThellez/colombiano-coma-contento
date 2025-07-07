@@ -5,7 +5,7 @@
 {% block content %}
 <h1 class="title">Crear Nuevo Plato</h1>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
   <div class="field">
@@ -54,28 +54,40 @@
   </div>
 
   <div class="field">
-  <label class="label">Nivel de Complejidad</label>
-  <div class="control">
-    <div class="select">
-      <select name="nivel_complejidad" required>
-        {% for nivel in niveles_complejidad %}
-        <option value="{{ nivel[0] }}"
-          {% if plato and nivel[0] == plato[3] %}selected{% endif %}>
-          {{ nivel[1] }}
-        </option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-</div>
-
-  <div class="field">
-    <label class="label">Foto (URL)</label>
+    <label class="label">Nivel de Complejidad</label>
     <div class="control">
-      <input class="input" type="text" name="foto">
-      <input type="file">
+      <div class="select">
+        <select name="nivel_complejidad" required>
+          {% for nivel in niveles_complejidad %}
+          <option value="{{ nivel[0] }}" {% if plato and nivel[0]==plato[3] %}selected{% endif %}>
+            {{ nivel[1] }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
   </div>
+
+
+
+  <div class="field"><label class="label">Imagen</label></div>
+  <div class="file has-name is-boxed">
+    <label class="file-label">
+      <input class="file-input" type="file" name="foto">
+      <span class="file-cta">
+        <span class="file-icon"><i class="fas fa-upload"></i></span>
+        <span class="file-label">Seleccionar archivo…</span>
+      </span>
+      <span class="file-name" id="nombre-archivo">
+        {% if plato and plato[4] %}
+        {{ plato[4].split('/')[-1] }}
+        {% else %}
+        Ninguno seleccionado
+        {% endif %}
+      </span>
+    </label>
+  </div>
+
 
   <div class="field">
     <label class="label">Precio de Venta</label>
@@ -120,42 +132,48 @@
   </div>
 </form>
 
+<script>
+  document.querySelector('.file-input').addEventListener('change', function () {
+    const nombre = this.files[0]?.name || 'Ninguno seleccionado';
+    document.getElementById('nombre-archivo').textContent = nombre;
+  });
+</script>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const buscarInput = document.getElementById('buscar-ingrediente');
-  const resultados = document.getElementById('resultados-busqueda');
-  const tabla = document.getElementById('ingredientes-seleccionados').querySelector('tbody');
-  const ingredientesInput = document.getElementById('ingredientes-json');
-  let ingredientesSeleccionados = [];
+  document.addEventListener('DOMContentLoaded', () => {
+    const buscarInput = document.getElementById('buscar-ingrediente');
+    const resultados = document.getElementById('resultados-busqueda');
+    const tabla = document.getElementById('ingredientes-seleccionados').querySelector('tbody');
+    const ingredientesInput = document.getElementById('ingredientes-json');
+    let ingredientesSeleccionados = [];
 
-  buscarInput.addEventListener('input', async () => {
-    const query = buscarInput.value.trim();
-    resultados.innerHTML = '';
-    if (query.length < 2) return;
+    buscarInput.addEventListener('input', async () => {
+      const query = buscarInput.value.trim();
+      resultados.innerHTML = '';
+      if (query.length < 2) return;
 
-    const res = await fetch(`/admin/ingredientes/api/ingredientes?q=${query}`);
-    const data = await res.json();
+      const res = await fetch(`/admin/ingredientes/api/ingredientes?q=${query}`);
+      const data = await res.json();
 
-    data.forEach(ing => {
-      const item = document.createElement('li');
-      item.textContent = `${ing.nombre} (${ing.unidad})`;
-      item.classList.add('is-clickable');
-      item.addEventListener('click', () => {
-        agregarIngrediente(ing);
-        resultados.innerHTML = '';
-        buscarInput.value = '';
+      data.forEach(ing => {
+        const item = document.createElement('li');
+        item.textContent = `${ing.nombre} (${ing.unidad})`;
+        item.classList.add('is-clickable');
+        item.addEventListener('click', () => {
+          agregarIngrediente(ing);
+          resultados.innerHTML = '';
+          buscarInput.value = '';
+        });
+        resultados.appendChild(item);
       });
-      resultados.appendChild(item);
     });
-  });
 
-  function agregarIngrediente(ingrediente) {
-    if (ingredientesSeleccionados.find(i => i.id_ingrediente === ingrediente.id_ingrediente)) return;
+    function agregarIngrediente(ingrediente) {
+      if (ingredientesSeleccionados.find(i => i.id_ingrediente === ingrediente.id_ingrediente)) return;
 
-    const tr = document.createElement('tr');
-    tr.id = `ingrediente-fila-${ingrediente.id_ingrediente}`;
-    tr.innerHTML = `
+      const tr = document.createElement('tr');
+      tr.id = `ingrediente-fila-${ingrediente.id_ingrediente}`;
+      tr.innerHTML = `
       <td>${ingrediente.nombre}</td>
       <td><input type="number" step="0.1" min="0.1" value="1" class="input cantidad"></td>
       <td>${ingrediente.unidad}</td>
@@ -163,32 +181,32 @@ document.addEventListener('DOMContentLoaded', () => {
       <td><button class="button is-danger is-small">Quitar</button></td>
     `;
 
-    tr.querySelector('button').addEventListener('click', () => {
-      quitarIngrediente(ingrediente.id_ingrediente);
-    });
+      tr.querySelector('button').addEventListener('click', () => {
+        quitarIngrediente(ingrediente.id_ingrediente);
+      });
 
-    tabla.appendChild(tr);
-    ingredientesSeleccionados.push({ ...ingrediente });
-    actualizarJSON();
-  }
+      tabla.appendChild(tr);
+      ingredientesSeleccionados.push({ ...ingrediente });
+      actualizarJSON();
+    }
 
-  function quitarIngrediente(id_ingrediente) {
-    ingredientesSeleccionados = ingredientesSeleccionados.filter(i => i.id_ingrediente !== id_ingrediente);
-    const fila = document.getElementById(`ingrediente-fila-${id_ingrediente}`);
-    if (fila) fila.remove();
-    actualizarJSON();
-  }
+    function quitarIngrediente(id_ingrediente) {
+      ingredientesSeleccionados = ingredientesSeleccionados.filter(i => i.id_ingrediente !== id_ingrediente);
+      const fila = document.getElementById(`ingrediente-fila-${id_ingrediente}`);
+      if (fila) fila.remove();
+      actualizarJSON();
+    }
 
-  function actualizarJSON() {
-    const rows = tabla.querySelectorAll('tr');
-    const datos = Array.from(rows).map((row, index) => ({
-      id_ingrediente: ingredientesSeleccionados[index].id_ingrediente,
-      cantidad: parseFloat(row.querySelector('.cantidad').value),
-      descripcion: row.querySelector('.descripcion').value
-    }));
-    ingredientesInput.value = JSON.stringify(datos);
-  }
-});
+    function actualizarJSON() {
+      const rows = tabla.querySelectorAll('tr');
+      const datos = Array.from(rows).map((row, index) => ({
+        id_ingrediente: ingredientesSeleccionados[index].id_ingrediente,
+        cantidad: parseFloat(row.querySelector('.cantidad').value),
+        descripcion: row.querySelector('.descripcion').value
+      }));
+      ingredientesInput.value = JSON.stringify(datos);
+    }
+  });
 </script>
 
 {% endblock %}

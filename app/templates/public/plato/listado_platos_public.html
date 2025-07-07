@@ -1,28 +1,55 @@
-{% extends 'base.html' %}
-
-{% block title %}Platos Disponibles{% endblock %}
-
-{% block content %}
-<h1 class="title">Platos Disponibles</h1>
-
-<div class="columns is-multiline">
-  {% for plato in platos %}
-  <div class="column is-one-third">
-    <div class="card">
-      <div class="card-content">
-        <p class="title">{{ plato[1] }}</p>
-        <p class="subtitle">${{ plato[4] }}</p>
-        <p>{{ plato[2] }}</p>
-      </div>
-      <footer class="card-footer">
-        <a href="{{ url_for('public_plato.detalle_plato_public', id=plato[0]) }}" class="card-footer-item">Ver Detalle</a>
-        <a href="{{ url_for('public_carrito.agregar_al_carrito', plato_id=plato[0]) }}"
-              class="card-footer-item button is-success">
-            AÃ±adir al carrito
-        </a>
-      </footer>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-{% endblock %}
+{% extends 'base.html' %}
+
+
+
+{% block title %}Platos Disponibles{% endblock %}
+
+
+
+{% block content %}
+
+<h1 class="title">Platos Disponibles</h1>
+
+
+
+<div class="columns is-multiline">
+
+  {% for plato in platos %}
+
+  <div class="column is-one-third">
+
+    <div class="card">
+
+      <div class="card-content">
+
+        <p class="title">{{ plato[1] }}</p>
+
+        <p class="subtitle">${{ plato[4] }}</p>
+
+        <p>{{ plato[2] }}</p>
+
+      </div>
+
+      <footer class="card-footer">
+
+        <a href="{{ url_for('public_plato.detalle_plato_public', id=plato[0]) }}" class="card-footer-item">Ver
+          Detalle</a>
+
+        <a href="{{ url_for('public_carrito.agregar_al_carrito', plato_id=plato[0]) }}"
+          class="card-footer-item button is-success">
+
+          Añadir al carrito
+
+        </a>
+
+      </footer>
+
+    </div>
+
+  </div>
+
+  {% endfor %}
+
+</div>
+
+{% endblock %}

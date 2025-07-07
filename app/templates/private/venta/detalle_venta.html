@@ -1,41 +1,74 @@
-{% extends 'base.html' %}
-
-{% block title %}Detalle Venta{% endblock %}
-
-{% block content %}
-<h1 class="title">Detalle de Venta</h1>
-
-<table class="table is-fullwidth">
-  <tr><th>ID Venta</th><td>{{ venta[0] }}</td></tr>
-  <tr><th>Fecha</th><td>{{ venta[1] }}</td></tr>
-  <tr><th>Cliente</th><td>{{ venta[2] }}</td></tr>
-  <tr><th>Total</th><td>${{ venta[3] }}</td></tr>
-</table>
-
-<h2 class="subtitle mt-5">Detalle de Productos</h2>
-
-<table class="table is-fullwidth is-striped">
-  <thead>
-    <tr>
-      <th>ID Plato</th>
-      <th>Nombre</th>
-      <th>Cantidad</th>
-      <th>Precio Unitario</th>
-      <th>Subtotal</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in detalle %}
-    <tr>
-      <td>{{ item[1] }}</td>
-      <td>{{ item[2] }}</td>
-      <td>{{ item[3] }}</td>
-      <td>${{ item[4] }}</td>
-      <td>${{ item[5] }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<a href="{{ url_for('private_venta.listado_ventas') }}" class="button is-light mt-3">Volver</a>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Detalle Venta{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card mb-5">
+      <header class="card-header">
+        <p class="card-header-title has-text-primary">
+          🧾 Información de la Venta
+        </p>
+      </header>
+      <div class="card-content">
+        <table class="table is-fullwidth is-hoverable is-bordered">
+          <tbody>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">ID Venta</th>
+              <td>{{ venta[0] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Fecha</th>
+              <td>{{ venta[1] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Cliente</th>
+              <td>{{ venta[2] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Total</th>
+              <td>${{ venta[3] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-info">
+          🍽️ Detalle de Productos Vendidos
+        </p>
+      </header>
+      <div class="card-content">
+        <table class="table is-fullwidth is-hoverable is-striped is-bordered">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in detalle %}
+            <tr>
+              <td>{{ item[0].strip() }}</td>
+              <td>{{ item[1] }}</td>
+              <td>${{ "{:,.2f}".format(item[2]) }}</td>
+              <td>${{ "{:,.2f}".format(item[1] * item[2]) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <footer class="card-footer">
+        <a href="{{ url_for('private_venta.listado_ventas') }}" class="card-footer-item button is-light is-rounded">
+          <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
+      </footer>
+    </div>
+
+</section>
+{% endblock %}

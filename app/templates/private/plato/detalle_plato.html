@@ -1,26 +1,62 @@
-{% extends 'base.html' %}
-
-{% block title %}Detalle Plato{% endblock %}
-
-{% block content %}
-<h1 class="title">Detalle de Plato</h1>
-
-<table class="table is-fullwidth">
-  <tr><th>ID</th><td>{{ plato[0] }}</td></tr>
-  <tr><th>Nombre</th><td>{{ plato[1] }}</td></tr>
-  <tr><th>Descripci√≥n</th><td>{{ plato[2] }}</td></tr>
-  <tr><th>Nivel Complejidad</th><td>{{ plato[3] }}</td></tr>
-  <tr><th>Foto</th>
-    <td>
-      {% if plato[4] %}
-        <img src="{{ url_for('static', filename='uploads/' ~ plato[4]) }}" alt="Foto de {{ plato[1] }}" style="max-width: 200px;">
-      {% endif %}
-        No disponible
-      {% endif %}
-    </td>
-  </tr>
-  <tr><th>Precio Venta</th><td>${{ plato[5] }}</td></tr>
-</table>
-
-<a href="{{ url_for('private_plato.listado_platos') }}" class="button is-light">Volver</a>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Detalle Plato{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title is-centered has-text-primary">
+          🍽️ Plato Detallado
+        </p>
+      </header>
+
+      <div class="card-content">
+        <table class="table is-fullwidth is-hoverable is-bordered">
+          <tbody>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">ID</th>
+              <td>{{ plato[0] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Nombre</th>
+              <td>{{ plato[1] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Descripción</th>
+              <td>{{ plato[2] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Nivel Complejidad</th>
+              <td>{{ plato[3] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Foto</th>
+              <td>
+                {% if plato[3] %}
+                <figure class="image is-128x128">
+                  <img src="{{ url_for('static', filename=plato[3]) }}" alt="Foto de {{ plato[1] }}">
+                </figure>
+                {% else %}
+                No disponible
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Precio Venta</th>
+              <td>${{ plato[4] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="card-footer">
+        <a href="{{ url_for('private_plato.listado_platos') }}" class="card-footer-item button is-light is-rounded">
+          <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
+      </footer>
+    </div>
+  </div>
+</section>
+{% endblock %}

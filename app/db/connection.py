@@ -25,12 +25,12 @@ def get_connection():
         print("[ERROR] Error al conectar con la base de datos:", e)
         return None
 
-def safe_execute(query, params=None, fetch=False, many=False):
+def safe_execute(query, params=None, fetch=False, fetchone=False, many=False):
     conn = None
     try:
         conn = get_connection()
         if not conn:
-            return [] if fetch else None
+            return [] if fetch or fetchone else None
 
         with conn.cursor() as cur:
             if params and many:
@@ -40,18 +40,20 @@ def safe_execute(query, params=None, fetch=False, many=False):
             else:
                 cur.execute(query)
 
-            if fetch:
+            if fetchone:
+                result = cur.fetchone()
+            elif fetch:
                 result = cur.fetchall()
             else:
                 result = True
 
-        conn.commit() 
+        conn.commit()
         return result
     except Exception as e:
         print("Error ejecutando consulta:", e)
         if conn:
             conn.rollback()
-        return [] if fetch else None
+        return [] if fetch or fetchone else None
     finally:
         if conn:
             conn.close()

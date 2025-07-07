@@ -219,3 +219,55 @@ def ventas_por_franja():
     except Exception as e:
         print(f"[ERROR ventas_por_franja] {e}")
         return []
+
+def obtener_ventas_con_total():
+    """
+    Devuelve todas las ventas con su fecha, franja y total calculado.
+    """
+    try:
+        query = """
+            SELECT 
+                v.id_venta,
+                v.fecha,
+                f.nombre AS franja,
+                COALESCE(SUM(p.precio * fa.cantidad), 0) AS total
+            FROM venta v
+            JOIN franja_horaria f ON v.id_franja_horaria_fk = f.id_franja_horaria
+            LEFT JOIN facturar fa ON v.id_venta = fa.id_venta_fk
+            LEFT JOIN plato p ON fa.id_plato_fk = p.id_plato
+            GROUP BY v.id_venta, v.fecha, f.nombre
+            ORDER BY v.fecha DESC
+        """
+        return safe_execute(query, fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_ventas_con_total] {e}")
+        return []
+
+
+
+"""
+SP
+"""
+
+
+
+def ventas_por_dificultad():
+    return safe_execute("SELECT * FROM sp_ventas_por_dificultad();", fetch=True)
+
+def ingredientes_mas_usados():
+    return safe_execute("SELECT * FROM sp_top_ingredientes_usados();", fetch=True)
+
+def platos_por_categoria_mes():
+    return safe_execute("SELECT * FROM sp_platos_por_categoria_mes();", fetch=True)
+
+def precio_promedio_por_region():
+    return safe_execute("SELECT * FROM sp_precio_promedio_por_region();", fetch=True)
+
+def ventas_por_dia_semana():
+    return safe_execute("SELECT * FROM sp_ventas_por_dia_semana();", fetch=True)
+
+def top_platos_por_franja():
+    return safe_execute("SELECT * FROM sp_top_platos_por_franja();", fetch=True)
+
+def platos_por_region_dificultad():
+    return safe_execute("SELECT * FROM sp_platos_por_region_dificultad();", fetch=True)

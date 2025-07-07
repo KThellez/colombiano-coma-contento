@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Inicio - Colombiano Coma Contento</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sour+Gummy&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item logo-navbar"
+        href="{% if session.get('rol') == 'admin' %}{{ url_for('private_dashboard.dashboard_home') }}{% else %}/{% endif %}">
+        Colombiano Coma Contento
+      </a>
+    </div>
+
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="{{ url_for('public_carta.home_public') }}">Carta</a>
+        <a class="navbar-item" href="{{ url_for('public_carrito.ver_carrito') }}">Carrito</a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          {% if session.get('usuario_id') %}
+          <div class="mr-3">Hola, {{ session.get('username') }}</div>
+          {% if session.get('rol') == 'admin' %}
+          <a class="button is-info is-light mr-2" href="{{ url_for('private_dashboard.dashboard_home') }}">
+            Modo Admin
+          </a>
+          {% endif %}
+          <a class="button is-light" href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+          {% else %}
+          <a class="button is-light" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO PÁGINA INICIAL -->
+  <section id="hero-section" class="hero is-fullheight is-background">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title is-1 texto-con-fondo">
+          El sabor de una Nación <span> Al gusto de nuestra sazón</span>
+        </h1>
+        <a href="{{ url_for('public_carta.home_public') }}" class="button is-warning is-medium mt-4">
+          Descubre nuestra carta
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    window.addEventListener('load', function () {
+      const hero = document.getElementById('hero-section');
+      if (hero) {
+        hero.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  </script>
+
+</body>
+
+</html>

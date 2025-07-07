@@ -34,6 +34,8 @@ def editar_region(id):
     if not region:
         return redirect(url_for('private_region.listado_regiones'))
 
+    region = region[0]  # ← Agrega esto
+
     if request.method == 'POST':
         nombre = request.form['nombre']
         encargado = request.form['encargado']
@@ -42,12 +44,18 @@ def editar_region(id):
 
     return render_template('private/region/editar_region.html', region=region)
 
+
+
+
+
 @private_region_bp.route('/detalle/<string:id>')
 def detalle_region(id):
     region = region_model.obtener_region_por_id(id)
     if not region:
         return redirect(url_for('private_region.listado_regiones'))
-    return render_template('private/region/detalle_region.html', region=region)
+    return render_template('private/region/detalle_region.html', region=region[0])
+
+
 
 @private_region_bp.route('/eliminar/<string:id>')
 def eliminar_region(id):

@@ -2,41 +2,45 @@
 
 {% block title %}Dashboard Admin{% endblock %}
 
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashstyle.css') }}">
+{% endblock %}
+
+{% block body_class %}dashboard{% endblock %}
+
+
 {% block content %}
-<h1 class="title">Dashboard de Ventas</h1>
+<h1 class="title has-text-light mb-5">Dashboard de Ventas</h1>
 
 <div class="columns is-multiline">
-  <div class="column is-half">
-    <h2 class="subtitle">Ventas Mensuales</h2>
-    <canvas id="chartMensual"></canvas>
-  </div>
+  {% set charts = [
+  ('Ventas Mensuales', 'chartMensual'),
+  ('Ventas Anuales', 'chartAnual'),
+  ('Top Platos Vendidos', 'chartTopPlatos'),
+  ('Ventas por Región', 'chartRegion'),
+  ('Ventas por Categoría', 'chartCategoria'),
+  ('Ventas por Franja Horaria', 'chartFranja'),
+  ('Ventas por Dificultad', 'chartDificultad'),
+  ('Ingredientes Más Usados', 'chartIngredientes'),
+  ('Platos por Categoría/Mes', 'chartCategoriaMes'),
+  ('Precio Promedio por Región', 'chartPrecioRegion'),
+  ('Ventas por Día de la Semana', 'chartDiaSemana'),
+  ('Top Platos por Franja', 'chartTopFranja'),
+  ('Platos por Región y Dificultad', 'chartRegionDificultad')
+  ] %}
 
+  {% for titulo, id in charts %}
   <div class="column is-half">
-    <h2 class="subtitle">Ventas Anuales</h2>
-    <canvas id="chartAnual"></canvas>
+    <div class="box has-background-dark has-text-white">
+      <h2 class="subtitle has-text-warning mb-2">{{ titulo }}</h2>
+      <canvas id="{{ id }}"></canvas>
+    </div>
   </div>
-
-  <div class="column is-half">
-    <h2 class="subtitle">Top Platos Vendidos</h2>
-    <canvas id="chartTopPlatos"></canvas>
-  </div>
-
-  <div class="column is-half">
-    <h2 class="subtitle">Ventas por Región</h2>
-    <canvas id="chartRegion"></canvas>
-  </div>
-
-  <div class="column is-half">
-    <h2 class="subtitle">Ventas por Categoría</h2>
-    <canvas id="chartCategoria"></canvas>
-  </div>
-
-  <div class="column is-half">
-    <h2 class="subtitle">Ventas por Franja Horaria</h2>
-    <canvas id="chartFranja"></canvas>
-  </div>
+  {% endfor %}
 </div>
 
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const charts = {
@@ -45,7 +49,31 @@
     chartTopPlatos: '/private/dashboard/top_platos',
     chartRegion: '/private/dashboard/ventas_por_region',
     chartCategoria: '/private/dashboard/ventas_por_categoria',
-    chartFranja: '/private/dashboard/ventas_por_franja'
+    chartFranja: '/private/dashboard/ventas_por_franja',
+
+    chartDificultad: '/private/dashboard/ventas_por_dificultad',
+    chartIngredientes: '/private/dashboard/ingredientes_mas_usados',
+    chartCategoriaMes: '/private/dashboard/platos_por_categoria_mes',
+    chartPrecioRegion: '/private/dashboard/precio_promedio_por_region',
+    chartDiaSemana: '/private/dashboard/ventas_por_dia_semana',
+    chartTopFranja: '/private/dashboard/top_platos_por_franja',
+    chartRegionDificultad: '/private/dashboard/platos_por_region_dificultad'
+  };
+
+  const colorPalettes = {
+    chartMensual: '#ff6384',
+    chartAnual: '#36a2eb',
+    chartTopPlatos: '#cc65fe',
+    chartRegion: '#ffa600',
+    chartCategoria: '#00d1b2',
+    chartFranja: '#e91e63',
+    chartDificultad: '#795548',
+    chartIngredientes: '#9c27b0',
+    chartCategoriaMes: '#3f51b5',
+    chartPrecioRegion: '#4caf50',
+    chartDiaSemana: '#ff9800',
+    chartTopFranja: '#009688',
+    chartRegionDificultad: '#607d8b'
   };
 
   for (const [id, url] of Object.entries(charts)) {
@@ -58,18 +86,33 @@
           data: {
             labels: data.labels,
             datasets: [{
-              label: id,
+              label: id.replace('chart', '').replace(/([A-Z])/g, ' $1'),
               data: data.data,
-              backgroundColor: 'rgba(54, 162, 235, 0.5)',
-              borderColor: 'rgba(54, 162, 235, 1)',
-              borderWidth: 1
+              backgroundColor: colorPalettes[id] + '88',
+              borderColor: colorPalettes[id],
+              borderWidth: 2,
+              borderRadius: 8
             }]
           },
           options: {
             responsive: true,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#333',
+                titleColor: '#fff',
+                bodyColor: '#fff'
+              }
+            },
             scales: {
+              x: {
+                ticks: { color: '#ddd' },
+                grid: { color: 'rgba(255,255,255,0.1)' }
+              },
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: { color: '#ddd' },
+                grid: { color: 'rgba(255,255,255,0.1)' }
               }
             }
           }

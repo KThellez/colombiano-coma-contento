@@ -26,6 +26,12 @@ h1.title span {
 
 body {
   font-family: 'Poppins', sans-serif;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 .navbar {
@@ -253,4 +259,40 @@ body {
   font-style: normal;
   font-size: 1.05rem;
   font-variation-settings: "wdth" 100;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero .title,
+.hero .button {
+  opacity: 0;
+  animation: fadeUp 1s ease-out forwards;
+}
+
+.hero .title {
+  animation-delay: 0.3s;
+}
+
+.hero .button {
+  animation-delay: 0.8s;
 }

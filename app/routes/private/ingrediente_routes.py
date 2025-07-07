@@ -35,10 +35,11 @@ def crear_ingrediente():
 
 @private_ingrediente_bp.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar_ingrediente(id):
-    ingrediente = ingrediente_model.obtener_ingrediente_por_id(id)
-    if not ingrediente:
+    resultado = ingrediente_model.obtener_ingrediente_por_id(id)
+    if not resultado:
         return redirect(url_for('private_ingrediente.listado_ingredientes'))
 
+    ingrediente = resultado[0]  # Desempaquetamos si viene como lista de una sola tupla
     unidades = unidad_medida_model.obtener_unidades_medida()
 
     if request.method == 'POST':
@@ -47,14 +48,20 @@ def editar_ingrediente(id):
         ingrediente_model.actualizar_ingrediente(id, nuevo_nombre, nueva_unidad)
         return redirect(url_for('private_ingrediente.listado_ingredientes'))
 
-    return render_template('private/ingrediente/editar_ingrediente.html',
-                           ingrediente=ingrediente, unidades=unidades)
+    return render_template(
+        'private/ingrediente/editar_ingrediente.html',
+        ingrediente=ingrediente,
+        unidades=unidades
+    )
+
 
 @private_ingrediente_bp.route('/detalle/<int:id>')
 def detalle_ingrediente(id):
     ingrediente = ingrediente_model.obtener_ingrediente_por_id(id)
     if not ingrediente:
         return redirect(url_for('private_ingrediente.listado_ingredientes'))
+    
+    ingrediente = ingrediente[0]  # ← Solo toma la tupla interna (ya desempaquetado)
     return render_template('private/ingrediente/detalle_ingrediente.html', ingrediente=ingrediente)
 
 @private_ingrediente_bp.route('/eliminar/<int:id>')

@@ -78,14 +78,15 @@ def obtener_plato_por_id(id_plato):
         id_plato (int): ID del plato.
 
     Returns:
-        tuple: Datos del plato.
+        tuple: Datos del plato (una sola tupla) o None si no existe.
     """
     try:
-        query = "SELECT * FROM plato WHERE id_plato = %s"
-        return safe_execute(query, (id_plato,), fetch=True)
+        query = "SELECT id_plato,nombre,descripcion, foto,precio, id_region_fk, id_categoria_fk, id_nivel_complejidad_fk FROM plato WHERE id_plato = %s"
+        resultado = safe_execute(query, (id_plato,), fetch=True)
+        return resultado[0] if resultado else None
     except Exception as e:
         print(f"[ERROR obtener_plato_por_id] {e}")
-        return []
+        return None
 
 
 def actualizar_plato(id_plato, data):
@@ -143,4 +144,18 @@ def eliminar_plato(id_plato):
         return safe_execute(query, (id_plato,))
     except Exception as e:
         print(f"[ERROR eliminar_plato] {e}")
+        return None
+    
+
+    
+def eliminar_ingredientes_de_plato(id_plato):
+    """
+    Elimina todos los ingredientes asociados a un plato específico
+    (relación N:M en la tabla 'contener').
+    """
+    try:
+        query = "DELETE FROM contener WHERE id_plato_fk = %s"
+        return safe_execute(query, (id_plato,))
+    except Exception as e:
+        print(f"[ERROR eliminar_ingredientes_de_plato] {e}")
         return None

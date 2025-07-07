@@ -48,11 +48,18 @@ def obtener_ingredientes_de_plato(id_plato):
     """
     try:
         query = """
-            SELECT i.id_ingrediente, i.nombre, u.nombre AS unidad, c.cantidad, c.breve_descripcion
-            FROM contener c
-            JOIN ingrediente i ON c.id_ingrediente_fk = i.id_ingrediente
-            JOIN unidad_medida u ON i.id_unidad_medida_fk = u.id_unidad_medida
-            WHERE c.id_plato_fk = %s
+        SELECT 
+            i.id_ingrediente, 
+            i.nombre, 
+            u.nombre AS unidad, 
+            c.cantidad, 
+            c.breve_descripcion AS breve_descripcion
+        FROM 
+            contener c
+        JOIN ingrediente i ON i.id_ingrediente = c.id_ingrediente_fk
+        JOIN unidad_medida u ON u.id_unidad_medida = i.id_unidad_medida_fk
+        WHERE 
+            c.id_plato_fk = %s
         """
         return safe_execute(query, (id_plato,), fetch=True) or []
     except Exception as e:

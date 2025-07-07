@@ -1,15 +1,44 @@
-{% extends 'base.html' %}
-
-{% block title %}Detalle Ingrediente{% endblock %}
-
-{% block content %}
-<h1 class="title">Detalle de Ingrediente</h1>
-
-<table class="table is-fullwidth">
-  <tr><th>ID</th><td>{{ ingrediente[0] }}</td></tr>
-  <tr><th>Nombre</th><td>{{ ingrediente[1] }}</td></tr>
-  <tr><th>Unidad de Medida</th><td>{{ ingrediente[2] }}</td></tr>
-</table>
-
-<a href="{{ url_for('private_ingrediente.listado_ingredientes') }}" class="button is-light">Volver</a>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Detalle Ingrediente{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title is-centered has-text-primary">
+          🧂 Ingrediente Detallado
+        </p>
+      </header>
+
+      <div class="card-content">
+        <table class="table is-fullwidth is-hoverable is-bordered">
+          <tbody>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">ID</th>
+              <td>{{ ingrediente[0] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Nombre</th>
+              <td>{{ ingrediente[1] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Unidad de Medida</th>
+              <td>{{ ingrediente[2] }}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="card-footer">
+        <a href="{{ url_for('private_ingrediente.listado_ingredientes') }}"
+          class="card-footer-item button is-light is-rounded">
+          <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
+      </footer>
+    </div>
+  </div>
+</section>
+{% endblock %}

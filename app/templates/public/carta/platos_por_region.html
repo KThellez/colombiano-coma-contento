@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Platos por Región{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">Platos de la región {{ region[1] }}</h1>
+    <p class="subtitle">Carta: <strong>{{ carta[1] }}</strong> ({{ carta[2] }} al {{ carta[3] }})</p>
+
+    {% if platos_por_categoria %}
+    {% for categoria, platos in platos_por_categoria.items() %}
+    <h2 class="title is-4 has-text-primary mt-5">{{ categoria }}</h2>
+
+    <div class="columns is-multiline">
+      {% for plato in platos %}
+      <div class="column is-one-third">
+        <div class="card">
+
+          {% if plato['foto'] %}
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img src="{{ url_for('static', filename=plato['foto']) }}" alt="Foto de {{ plato['nombre'] }}">
+            </figure>
+          </div>
+          {% endif %}
+
+          <div class="card-content">
+            <p class="title is-5">{{ plato['nombre'] }}</p>
+            <p>{{ plato['descripcion'] }}</p>
+
+            {% if plato['precio'] is number %}
+            <p class="has-text-weight-semibold mt-2">
+              Precio: ${{ "{:,.0f}".format(plato['precio']) }}
+            </p>
+            {% else %}
+            <p class="has-text-grey mt-2">Precio no disponible</p>
+            {% endif %}
+
+            <p class="is-size-7 has-text-grey">
+              Nivel: {{ plato['nivel'] }}
+            </p>
+          </div>
+
+          <footer class="card-footer">
+            <a href="{{ url_for('public_plato.detalle_plato_public', id=plato['id']) }}" class="card-footer-item">
+              Ver más
+            </a>
+            <a href="{{ url_for('public_carrito.agregar_al_carrito', plato_id=plato['id']) }}"
+              class="card-footer-item has-text-success">
+              Agregar al carrito
+            </a>
+          </footer>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="notification is-warning is-light">
+      No hay platos disponibles para esta región en la carta seleccionada.
+    </div>
+    {% endif %}
+
+    <div class="mt-5">
+      <a href="{{ url_for('public_carta.home_public') }}" class="button is-light">Volver a Carta</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

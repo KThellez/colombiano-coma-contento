@@ -15,5 +15,5 @@ DB_CONFIG = {
 SECRET_KEY = os.getenv("SECRET_KEY")
 WTF_CSRF_SECRET_KEY = os.getenv("SECRET_KEY")
 
-UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "app/uploads")
+UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "static/uploads")
 ALLOWED_EXTENSIONS = set(os.getenv("ALLOWED_EXTENSIONS", "png,jpg,jpeg").split(','))

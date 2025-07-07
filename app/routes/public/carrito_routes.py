@@ -27,7 +27,7 @@ def ver_carrito():
     for plato_id in carrito:
         plato = plato_model.obtener_plato_por_id(plato_id)
         if plato:
-            platos.append(plato[0])  # plato[0] es el registro de la query
+            platos.append(plato)
 
     return render_template('public/carrito/ver_carrito.html', platos=platos)
 
@@ -59,12 +59,17 @@ def finalizar_compra():
     for plato_id, cantidad in conteo_platos.items():
         plato = plato_model.obtener_plato_por_id(plato_id)
         if plato:
-            precio_unitario = float(plato[0][4]) 
+            print("[DEBUG PLATO]", plato)
+            try:
+                precio_unitario = float(plato[4])
+            except (ValueError, TypeError) as e:
+                print(f"[ERROR] Plato ID {plato_id} tiene precio inválido: {plato[4]} - {e}")
+                continue
             detalle_venta_model.crear_detalle_venta(
                 id_venta, plato_id, cantidad, precio_unitario
             )
             platos_factura.append({
-                'nombre': plato[0][1],
+                'nombre': plato[1],
                 'precio': precio_unitario,
                 'cantidad': cantidad,
                 'subtotal': precio_unitario * cantidad

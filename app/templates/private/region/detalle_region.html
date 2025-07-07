@@ -3,13 +3,40 @@
 {% block title %}Detalle Región{% endblock %}
 
 {% block content %}
-<h1 class="title">Detalle de Región</h1>
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title is-centered has-text-primary">
+          🗺️ Región Detallada
+        </p>
+      </header>
 
-<table class="table is-fullwidth">
-  <tr><th>ID</th><td>{{ region[0] }}</td></tr>
-  <tr><th>Nombre</th><td>{{ region[1] }}</td></tr>
-  <tr><th>Encargado</th><td>{{ region[2] }}</td></tr>
-</table>
+      <div class="card-content">
+        <table class="table is-fullwidth is-hoverable is-bordered">
+          <tbody>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">ID</th>
+              <td>{{ region[0] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Nombre</th>
+              <td>{{ region[1] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Encargado</th>
+              <td>{{ region[2] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-<a href="{{ url_for('private_region.listado_regiones') }}" class="button is-light">Volver</a>
+      <footer class="card-footer">
+        <a href="{{ url_for('private_region.listado_regiones') }}" class="card-footer-item button is-light is-rounded">
+          <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
+      </footer>
+    </div>
+  </div>
+</section>
 {% endblock %}

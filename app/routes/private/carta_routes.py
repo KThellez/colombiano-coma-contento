@@ -77,12 +77,17 @@ def editar_carta(id):
         platos_asociados=ids_asociados
     )
 
+
+
 @private_carta_bp.route('/detalle/<id>')
 def detalle_carta(id):
     carta = carta_model.obtener_carta_por_id(id)
     if not carta:
         return redirect(url_for('private_carta.listado_cartas'))
-    return render_template('private/carta/detalle_carta.html', carta=carta)
+
+    platos = detalle_carta_model.obtener_platos_de_carta(id)
+    return render_template('private/carta/detalle_carta.html', carta=carta[0], platos=platos)
+
 
 @private_carta_bp.route('/eliminar/<id>')
 def eliminar_carta(id):

@@ -1,15 +1,42 @@
-{% extends 'base.html' %}
-
-{% block title %}Detalle Usuario{% endblock %}
-
-{% block content %}
-<h1 class="title">Detalle de Usuario</h1>
-
-<table class="table is-fullwidth">
-  <tr><th>ID</th><td>{{ usuario[0] }}</td></tr>
-  <tr><th>Username</th><td>{{ usuario[1] }}</td></tr>
-  <tr><th>Rol</th><td>{{ usuario[3] }}</td></tr>
-</table>
-
-<a href="{{ url_for('private_usuario.listado_usuarios') }}" class="button is-light">Volver</a>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Detalle Usuario{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-link">
+          👤 Información del Usuario
+        </p>
+      </header>
+
+      <div class="card-content">
+        <table class="table is-fullwidth is-hoverable is-bordered">
+          <tbody>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">ID</th>
+              <td>{{ usuario[0] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Nombre de Usuario</th>
+              <td>{{ usuario[1] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Rol</th>
+              <td>{{ usuario[3] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="card-footer">
+        <a href="{{ url_for('private_usuario.listado_usuarios') }}" class="card-footer-item button is-light is-rounded">
+          <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
+      </footer>
+    </div>
+  </div>
+</section>
+{% endblock %}
