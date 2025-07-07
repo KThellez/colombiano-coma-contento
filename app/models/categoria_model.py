@@ -13,7 +13,6 @@ Funciones incluidas:
 - eliminar_categoria
 """
 
-
 from app.db.connection import safe_execute
 
 def crear_categoria(nombre):
@@ -26,10 +25,12 @@ def crear_categoria(nombre):
     Returns:
         None
     """
-
-    query ="INSERT INTO categorias (nombre) VALUES (%s)"
-    params =(nombre,)
-    return safe_execute(query, params)
+    try:
+        query = "INSERT INTO categoria (nombre) VALUES (%s)"
+        return safe_execute(query, (nombre,))
+    except Exception as e:
+        print(f"[ERROR crear_categoria] {e}")
+        return None
 
 
 def obtener_categorias():
@@ -39,8 +40,12 @@ def obtener_categorias():
     Returns:
         list: Lista de categorías.
     """
-    query ="SELECT * FROM categorias"
-    return safe_execute(query, fetch=True) or []
+    try:
+        query = "SELECT * FROM categoria"
+        return safe_execute(query, fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_categorias] {e}")
+        return []
 
 
 def obtener_categoria_por_id(id_categoria):
@@ -53,9 +58,12 @@ def obtener_categoria_por_id(id_categoria):
     Returns:
         tuple: Datos de la categoría.
     """
-    query ="SELECT * FROM categorias WHERE id = %s"
-    params =(id_categoria,)
-    return safe_execute(query, params, fetch=True) or []
+    try:
+        query = "SELECT * FROM categoria WHERE id_categoria = %s"
+        return safe_execute(query, (id_categoria,), fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_categoria_por_id] {e}")
+        return []
 
 
 def actualizar_categoria(id_categoria, nuevo_nombre):
@@ -69,9 +77,12 @@ def actualizar_categoria(id_categoria, nuevo_nombre):
     Returns:
         None
     """
-    query ="UPDATE categorias SET nombre = %s WHERE id = %s"
-    params =(nuevo_nombre, id_categoria)
-    return safe_execute(query, params)
+    try:
+        query = "UPDATE categoria SET nombre = %s WHERE id_categoria = %s"
+        return safe_execute(query, (nuevo_nombre, id_categoria))
+    except Exception as e:
+        print(f"[ERROR actualizar_categoria] {e}")
+        return None
 
 
 def eliminar_categoria(id_categoria):
@@ -85,7 +96,9 @@ def eliminar_categoria(id_categoria):
     Returns:
         None
     """
-    query ="DELETE FROM categorias WHERE id = %s"
-    params =(id_categoria,)
-    return safe_execute(query, params)
-
+    try:
+        query = "DELETE FROM categoria WHERE id_categoria = %s"
+        return safe_execute(query, (id_categoria,))
+    except Exception as e:
+        print(f"[ERROR eliminar_categoria] {e}")
+        return None

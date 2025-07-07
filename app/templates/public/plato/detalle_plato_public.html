@@ -1,28 +1,79 @@
 {% extends 'base.html' %}
-
-{% block title %}Detalle Plato{% endblock %}
+{% block title %}Detalle de {{ plato.nombre }}{% endblock %}
 
 {% block content %}
-<h1 class="title">{{ plato[1] }}</h1>
+<section class="section">
+  <div class="container">
+    <div class="card has-shadow p-5">
+      <div class="card-content">
+        <div class="columns is-vcentered">
 
-<div class="columns">
-  <div class="column is-half">
-    {% if plato[4] %}
-      <figure class="image">
-        <img src="{{ plato[4] }}" alt="Foto de {{ plato[1] }}">
-      </figure>
-    {% endif %}
+          <!-- Imagen del plato -->
+          <div class="column is-5">
+            {% if plato.foto %}
+            <figure class="image is-4by3">
+              <img class="is-rounded" src="{{ url_for('static', filename=plato.foto) }}"
+                alt="Foto de {{ plato.nombre }}">
+            </figure>
+            {% else %}
+            <figure
+              class="image is-4by3 has-background-light has-text-grey-light is-flex is-align-items-center is-justify-content-center">
+              <p class="has-text-grey">Sin imagen disponible</p>
+            </figure>
+            {% endif %}
+          </div>
+
+          <!-- Información del plato -->
+          <div class="column is-7">
+            <h1 class="title is-3 has-text-primary">{{ plato.nombre }}</h1>
+            <p class="mb-3">{{ plato.descripcion }}</p>
+
+            <div class="content mt-4">
+              <p><strong>💰 Precio:</strong>
+                <span class="has-text-success">${{ "{:,.0f}".format(plato.precio) }}</span>
+              </p>
+
+              <p><strong>⚙️ Nivel de complejidad:</strong>
+                {% if plato.nivel in ['Fácil', 'Intermedio', 'Difícil'] %}
+                {{ plato.nivel }}
+                {% else %}
+                Desconocido
+                {% endif %}
+              </p>
+
+              <p><strong>📂 Categoría:</strong> {{ plato.categoria }}</p>
+
+              {% if plato.ingredientes %}
+              <p><strong>🧂 Ingredientes:</strong></p>
+              <ul>
+                {% for ing in plato.ingredientes %}
+                <li>🍽️ {{ ing[0]|capitalize }} – {{ ing[2] }} {{ ing[1] }} ({{ ing[3] }})</li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p><em>No se registraron ingredientes para este plato.</em></p>
+              {% endif %}
+
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="mt-5 buttons">
+              {% if id_carta and id_region %}
+              <a href="{{ url_for('public_carta.platos_por_region', id_carta=id_carta, id_region=id_region) }}"
+                class="button is-link is-light">
+                <i class="fas fa-arrow-left mr-2"></i> Volver a la Región
+              </a>
+              {% endif %}
+
+              <a href="{{ url_for('public_carta.home_public') }}" class="button is-primary is-light">
+                <i class="fas fa-home mr-2"></i> Volver a Carta
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="column is-half">
-    <p><strong>Descripción:</strong> {{ plato[2] }}</p>
-    <p><strong>Nivel de complejidad:</strong> {{ plato[3] }}</p>
-    <p><strong>Precio de venta:</strong> ${{ plato[5] }}</p>
-  </div>
-</div>
-
-<a href="{{ url_for('public_plato.listado_platos_public') }}" class="button is-light mt-3">Volver a Platos</a>
-
-
-
-
+</section>
 {% endblock %}

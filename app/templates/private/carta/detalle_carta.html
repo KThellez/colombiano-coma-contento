@@ -3,14 +3,59 @@
 {% block title %}Detalle Carta{% endblock %}
 
 {% block content %}
-<h1 class="title">Detalle de Carta</h1>
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title is-centered has-text-primary">
+          📜 Carta Detallada
+        </p>
+      </header>
 
-<table class="table is-fullwidth">
-  <tr><th>ID</th><td>{{ carta[0] }}</td></tr>
-  <tr><th>Nombre</th><td>{{ carta[1] }}</td></tr>
-  <tr><th>Fecha Inicio</th><td>{{ carta[2] }}</td></tr>
-  <tr><th>Fecha Fin</th><td>{{ carta[3] }}</td></tr>
-</table>
+      <div class="card-content">
+        <table class="table is-fullwidth is-hoverable is-bordered">
+          <tbody>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">ID</th>
+              <td>{{ carta[0] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Nombre</th>
+              <td>{{ carta[1] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Fecha Inicio</th>
+              <td>{{ carta[2] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Fecha Fin</th>
+              <td>{{ carta[3] }}</td>
+            </tr>
+            <tr>
+              <th class="has-background-light has-text-weight-semibold">Platos asociados</th>
+              <td>
+                <ul>
+                  {% for plato in platos %}
+                  <li>
+                    {{ plato[1] }}
+                    {% if plato[5] %}
+                    – ${{ '%.0f' | format(plato[5]) }}
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-<a href="{{ url_for('private_carta.listado_cartas') }}" class="button is-light">Volver</a>
+      <footer class="card-footer">
+        <a href="{{ url_for('private_carta.listado_cartas') }}" class="card-footer-item button is-light is-rounded">
+          <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
+      </footer>
+    </div>
+  </div>
+</section>
 {% endblock %}

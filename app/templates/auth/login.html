@@ -3,38 +3,98 @@
 {% block title %}Iniciar Sesión{% endblock %}
 
 {% block content %}
-<div class="columns is-centered">
-  <div class="column is-half">
-    <h1 class="title has-text-centered">Iniciar Sesión</h1>
+<style>
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in-out;
+  }
 
-    {% if error %}
-      <div class="notification is-danger">
-        {{ error }}
-      </div>
-    {% endif %}
+  .glass-card:hover {
+    transform: scale(1.015);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
 
-    <form method="post">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <div class="field">
-        <label class="label">Usuario</label>
-        <div class="control">
-          <input class="input" type="text" name="username" placeholder="Tu usuario" required>
+  .login-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    color: #7957d5;
+  }
+
+  .input::placeholder {
+    color: #b0b0b0;
+  }
+
+  .card-header-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+</style>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-5">
+
+        <div class="card glass-card animate__animated animate__fadeInDown">
+
+          <header class="card-header">
+            <p class="card-header-title is-centered has-text-primary">
+              <i class="fas fa-lock login-icon"></i> Bienvenido a Colombiano, Coma Contento
+            </p>
+          </header>
+
+          <div class="card-content">
+            {% if error %}
+            <div class="notification is-danger is-light">
+              <i class="fas fa-exclamation-triangle mr-2"></i> {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+              <div class="field">
+                <label class="label">Usuario</label>
+                <div class="control has-icons-left">
+                  <input class="input is-rounded" type="text" name="username" placeholder="Tu usuario" required>
+                  <span class="icon is-left">
+                    <i class="fas fa-user"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Contraseña</label>
+                <div class="control has-icons-left">
+                  <input class="input is-rounded" type="password" name="password" placeholder="Tu contraseña" required>
+                  <span class="icon is-left">
+                    <i class="fas fa-key"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field mt-5">
+                <button class="button is-primary is-fullwidth is-rounded">
+                  <i class="fas fa-sign-in-alt mr-2"></i> Ingresar
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <footer class="card-footer">
+            <p class="card-footer-item has-text-grey-dark is-size-7">
+              Bienvenid@ admin, ten un buen dia!
+            </p>
+          </footer>
+
         </div>
-      </div>
 
-      <div class="field">
-        <label class="label">Contraseña</label>
-        <div class="control">
-          <input class="input" type="password" name="password" placeholder="Tu contraseña" required>
-        </div>
       </div>
-
-      <div class="field is-grouped is-grouped-right">
-        <div class="control">
-          <button class="button is-primary">Ingresar</button>
-        </div>
-      </div>
-    </form>
+    </div>
   </div>
-</div>
+</section>
 {% endblock %}

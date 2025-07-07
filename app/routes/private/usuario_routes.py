@@ -40,20 +40,28 @@ def editar_usuario(id):
     if request.method == 'POST':
         new_data = {
             "username": request.form['username'],
-            "password": generate_password_hash(request.form['password']),
             "rol": request.form['rol']
         }
+
+        nueva_contrasena = request.form['password']
+        if nueva_contrasena.strip():
+            new_data["password"] = generate_password_hash(nueva_contrasena)
+
         usuario_model.actualizar_usuario(id, new_data)
         return redirect(url_for('private_usuario.listado_usuarios'))
 
     return render_template('private/usuario/editar_usuario.html', usuario=usuario)
+
+
+
 
 @private_usuario_bp.route('/detalle/<int:id>')
 def detalle_usuario(id):
     usuario = usuario_model.obtener_usuario_por_id(id)
     if not usuario:
         return redirect(url_for('private_usuario.listado_usuarios'))
-    return render_template('private/usuario/detalle_usuario.html', usuario=usuario)
+    return render_template('private/usuario/detalle_usuario.html', usuario=usuario[0])  
+
 
 @private_usuario_bp.route('/eliminar/<int:id>')
 def eliminar_usuario(id):

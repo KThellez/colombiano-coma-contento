@@ -25,12 +25,14 @@ def login():
         password = request.form['password']
 
         usuario = usuario_model.obtener_usuario_por_username(username)
-        #if usuario and usuario[2] == password:  # ⚠️ Solo temporal (sin encriptar)
+
         if usuario is not None and check_password_hash(usuario[2], password):
             session['usuario_id'] = usuario[0]
             session['username'] = usuario[1]
             session['rol'] = usuario[3]
-            return redirect(url_for('private_plato.listado_platos'))  # Redirige al dashboard admin cuando tenga un home
+
+
+            return redirect(url_for('main.index'))
 
         return render_template('auth/login.html', error="Credenciales inválidas")
     
@@ -40,4 +42,5 @@ def login():
 @auth_bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('public_plato.listado_platos_public'))
+    return redirect(url_for('main.index'))
+

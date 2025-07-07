@@ -1,9 +1,12 @@
 from flask import Blueprint, render_template, request, session, abort
 from werkzeug.security import generate_password_hash
 
+from app.utils.auth import login_required
+
 utils_bp = Blueprint('utils', __name__, url_prefix='/utils')
 
 @utils_bp.route('/generar-password', methods=['GET', 'POST'])
+@login_required
 def generar_password():
     # SOLO PERMITIR A ADMIN
     if session.get("rol") != "admin":

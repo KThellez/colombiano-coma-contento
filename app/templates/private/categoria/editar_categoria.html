@@ -3,26 +3,30 @@
 {% block title %}Editar Categoría{% endblock %}
 
 {% block content %}
-<h1 class="title">Editar Categoría</h1>
+<div class="container mt-5">
+  <div class="box">
+    <h1 class="title has-text-centered">Editar Categoría</h1>
 
-<form method="post">
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field">
+        <label class="label">Nombre</label>
+        <div class="control">
+          <input class="input" type="text" name="nombre" value="{{ categoria[1] }}" required>
+        </div>
+      </div>
 
-  <div class="field">
-    <label class="label">Nombre</label>
-    <div class="control">
-      <input class="input" type="text" name="nombre" value="{{ categoria[1] }}" required>
-    </div>
+      <div class="field is-grouped is-justify-content-center mt-5">
+        <div class="control">
+          <button class="button is-primary is-rounded px-5">Guardar Cambios</button>
+        </div>
+        <div class="control">
+          <a href="{{ url_for('private_categoria.listado_categorias') }}"
+            class="button is-light is-rounded px-5">Cancelar</a>
+        </div>
+      </div>
+    </form>
   </div>
-
-  <div class="field is-grouped">
-    <div class="control">
-      <button class="button is-primary">Guardar Cambios</button>
-    </div>
-    <div class="control">
-      <a href="{{ url_for('private_categoria.listado_categorias') }}" class="button is-light">Cancelar</a>
-    </div>
-  </div>
-</form>
+</div>
 {% endblock %}

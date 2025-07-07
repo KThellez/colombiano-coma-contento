@@ -3,47 +3,51 @@
 {% block title %}Editar Usuario{% endblock %}
 
 {% block content %}
-<h1 class="title">Editar Usuario</h1>
+<div class="container mt-5">
+  <div class="box">
+    <h1 class="title has-text-centered">Editar Usuario</h1>
 
-<form method="post">
-  
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-  <div class="field">
-    <label class="label">Username</label>
-    <div class="control">
-      <input class="input" type="text" name="username" value="{{ usuario[1] }}" required>
-    </div>
-  </div>
-
-  <div class="field">
-    <label class="label">Contraseña</label>
-    <div class="control">
-      <input class="input" type="password" name="password">
-    </div>
-    <p class="help">Deja vacío si no deseas cambiar la contraseña.</p>
-  </div>
-
-  <div class="field">
-    <label class="label">Rol</label>
-    <div class="control">
-      <div class="select">
-        <select name="rol" required>
-          <option value="admin" {% if usuario[3] == "admin" %}selected{% endif %}>Admin</option>
-          <option value="editor" {% if usuario[3] == "editor" %}selected{% endif %}>Editor</option>
-          <option value="viewer" {% if usuario[3] == "viewer" %}selected{% endif %}>Viewer</option>
-        </select>
+      <div class="field">
+        <label class="label">Nombre de Usuario</label>
+        <div class="control">
+          <input class="input" type="text" name="username" value="{{ usuario[1] }}" required>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="field is-grouped">
-    <div class="control">
-      <button class="button is-primary">Guardar Cambios</button>
-    </div>
-    <div class="control">
-      <a href="{{ url_for('private_usuario.listado_usuarios') }}" class="button is-light">Cancelar</a>
-    </div>
+      <div class="field">
+        <label class="label">Contraseña</label>
+        <div class="control">
+          <input class="input" type="password" name="password" placeholder="Nueva contraseña (opcional)">
+        </div>
+        <p class="help">Deja este campo vacío si no deseas cambiar la contraseña.</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Rol</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select name="rol" required>
+              <option value="admin" {% if usuario[3]=="admin" %}selected{% endif %}>Administrador</option>
+              <option value="editor" {% if usuario[3]=="editor" %}selected{% endif %}>Editor</option>
+              <option value="viewer" {% if usuario[3]=="viewer" %}selected{% endif %}>Visualizador</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field is-grouped is-justify-content-center mt-5">
+        <div class="control">
+          <button class="button is-primary is-rounded px-5">Guardar Cambios</button>
+        </div>
+        <div class="control">
+          <a href="{{ url_for('private_usuario.listado_usuarios') }}"
+            class="button is-light is-rounded px-5">Cancelar</a>
+        </div>
+      </div>
+    </form>
   </div>
-</form>
+</div>
 {% endblock %}

@@ -15,20 +15,27 @@ def require_login():
     
 @private_venta_bp.route('/')
 def listado_ventas():
-    ventas = venta_model.obtener_ventas()
+    ventas = venta_model.obtener_ventas_con_total()
     #ventas = obtener_ventas_fake()
     return render_template('private/venta/listado_ventas.html', ventas=ventas)
 
-@private_venta_bp.route('/detalle/<int:id>')
+
+@private_venta_bp.route('/detalle/<string:id>')
 def detalle_venta(id):
-    venta = venta_model.obtener_venta_por_id(id)
-    if not venta:
+    resultado = venta_model.obtener_venta_por_id(id)
+    if not resultado:
         return redirect(url_for('private_venta.listado_ventas'))
 
+    venta = resultado[0]  # Desempacamos la tupla como en los otros detalles
     detalle = detalle_venta_model.obtener_detalle_venta(id)
+    print(detalle)
+
     return render_template('private/venta/detalle_venta.html', venta=venta, detalle=detalle)
 
-@private_venta_bp.route('/eliminar/<int:id>')
+
+
+@private_venta_bp.route('/eliminar/<string:id>')
 def eliminar_venta(id):
     venta_model.eliminar_venta(id)
     return redirect(url_for('private_venta.listado_ventas'))
+

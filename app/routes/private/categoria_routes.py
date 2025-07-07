@@ -32,6 +32,8 @@ def editar_categoria(id):
     if not categoria:
         return redirect(url_for('private_categoria.listado_categorias'))
 
+    categoria = categoria[0]  # ← Desempaquetar la tupla
+
     if request.method == 'POST':
         nuevo_nombre = request.form['nombre']
         categoria_model.actualizar_categoria(id, nuevo_nombre)
@@ -39,12 +41,18 @@ def editar_categoria(id):
 
     return render_template('private/categoria/editar_categoria.html', categoria=categoria)
 
+
+
+
+
 @private_categoria_bp.route('/detalle/<int:id>')
 def detalle_categoria(id):
     categoria = categoria_model.obtener_categoria_por_id(id)
     if not categoria:
         return redirect(url_for('private_categoria.listado_categorias'))
-    return render_template('private/categoria/detalle_categoria.html', categoria=categoria)
+    return render_template('private/categoria/detalle_categoria.html', categoria=categoria[0])
+
+
 
 @private_categoria_bp.route('/eliminar/<int:id>')
 def eliminar_categoria(id):

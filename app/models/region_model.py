@@ -12,7 +12,6 @@ Funciones incluidas:
 - eliminar_region
 """
 
-
 from app.db.connection import safe_execute
 
 def crear_region(nombre, encargado):
@@ -26,9 +25,12 @@ def crear_region(nombre, encargado):
     Returns:
         None
     """
-    query ="INSERT INTO regiones (nombre, encargado) VALUES (%s, %s)"
-    params =(nombre, encargado)
-    return safe_execute(query, params)
+    try:
+        query = "INSERT INTO region (nombre, encargado) VALUES (%s, %s)"
+        return safe_execute(query, (nombre, encargado))
+    except Exception as e:
+        print(f"[ERROR crear_region] {e}")
+        return None
 
 
 def obtener_todas_regiones():
@@ -38,9 +40,12 @@ def obtener_todas_regiones():
     Returns:
         list: Lista de regiones.
     """
-
-    query ="SELECT * FROM regiones"
-    return safe_execute(query, fetch=True) or []
+    try:
+        query = "SELECT * FROM region"
+        return safe_execute(query, fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_todas_regiones] {e}")
+        return []
 
 
 def obtener_region_por_id(region_id):
@@ -53,9 +58,12 @@ def obtener_region_por_id(region_id):
     Returns:
         tuple: Datos de la región.
     """
-    query ="SELECT * FROM regiones WHERE id = %s"
-    params =(region_id,)
-    return safe_execute(query, params, fetch=True) or []
+    try:
+        query = "SELECT * FROM region WHERE id_region = %s"
+        return safe_execute(query, (region_id,), fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_region_por_id] {e}")
+        return []
 
 
 def actualizar_region(region_id, nombre, encargado):
@@ -70,9 +78,12 @@ def actualizar_region(region_id, nombre, encargado):
     Returns:
         None
     """
-    query ="UPDATE regiones SET nombre = %s, encargado = %s WHERE id = %s"
-    params =(nombre, encargado, region_id)
-    return safe_execute(query, params)
+    try:
+        query = "UPDATE region SET nombre = %s, encargado = %s WHERE id_region = %s"
+        return safe_execute(query, (nombre, encargado, region_id))
+    except Exception as e:
+        print(f"[ERROR actualizar_region] {e}")
+        return None
 
 
 def eliminar_region(region_id):
@@ -86,7 +97,9 @@ def eliminar_region(region_id):
     Returns:
         None
     """
-    query ="DELETE FROM regiones WHERE id = %s"
-    params =(region_id,)
-    return safe_execute(query, params)
-
+    try:
+        query = "DELETE FROM region WHERE id_region = %s"
+        return safe_execute(query, (region_id,))
+    except Exception as e:
+        print(f"[ERROR eliminar_region] {e}")
+        return None

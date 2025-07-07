@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Carta vigente{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container has-text-centered">
+    <h1 class="title is-2">{{ carta.nombre }}</h1>
+    <p class="subtitle is-5">Válida del {{ carta.fecha_inicio }} al {{ carta.fecha_fin }}</p>
+    <h2 class="title is-4 mt-5">Regiones de esta carta:</h2>
+
+    {% for region in regiones %}
+    <div class="box mt-6">
+      <h3 class="title is-3 has-text-primary">{{ region.nombre }}</h3>
+      <p class="subtitle is-6 mb-4">Encargado: {{ region.encargado }}</p>
+
+      <div class="columns is-multiline is-centered">
+        {% for plato in region.platos[:3] %}
+        <div class="column is-one-third">
+          <div class="card">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                {% if plato[3] %}
+                <img src="{{ url_for('static', filename=plato[3].replace('\\', '/')) }}" alt="Foto de {{ plato[1] }}">
+                <!--
+                <img src="{{ url_for('static', filename='uploads/' ~ plato[3]) }}" alt="Foto de {{ plato[1] }}">
+                -->
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default-plato.jpg') }}" alt="Sin imagen">
+                {% endif %}
+              </figure>
+            </div>
+            <div class="card-content">
+              <p class="title is-5">{{ plato[1] }}</p>
+              <p class="subtitle is-6">
+                {% if plato[2] %}
+                ${{ plato[2] }}
+                {% else %}
+                <em>Precio no disponible</em>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <div class="has-text-right mt-3">
+        <a href="{{ url_for('public_carta.platos_por_region', id_carta=carta.id_carta, id_region=region.id) }}"
+          class="button is-link is-light is-small">
+          Ver todos los platos de {{ region.nombre }}
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,36 +1,43 @@
-{% extends 'base.html' %}
-
-{% block title %}Crear Ingrediente{% endblock %}
-
-{% block content %}
-<h1 class="title">Crear Nuevo Ingrediente</h1>
-
-<form method="post">
-  
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-  <div class="field">
-    <label class="label">Nombre</label>
-    <div class="control">
-      <input class="input" type="text" name="nombre" required>
-    </div>
-  </div>
-
-  <div class="field">
-    <label class="label">Unidad de Medida</label>
-    <div class="control">
-      <input class="input" type="text" name="unidad" required>
-    </div>
-  </div>
-
-
-  <div class="field is-grouped">
-    <div class="control">
-      <button class="button is-primary">Guardar</button>
-    </div>
-    <div class="control">
-      <a href="{{ url_for('private_ingrediente.listado_ingredientes') }}" class="button is-light">Cancelar</a>
-    </div>
-  </div>
-</form>
-{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Crear Ingrediente{% endblock %}
+
+{% block content %}
+<h1 class="title">Crear Nuevo Ingrediente</h1>
+
+<form method="post">
+  
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="field">
+    <label class="label">Nombre</label>
+    <div class="control">
+      <input class="input" type="text" name="nombre" required>
+    </div>
+  </div>
+
+  <div class="field">
+  <label class="label">Unidad de Medida</label>
+  <div class="control">
+    <div class="select">
+      <select name="id_unidad_medida" required>
+        <option value="">Seleccione una unidad</option>
+        {% for unidad in unidades %}
+          <option value="{{ unidad[0] }}">{{ unidad[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+</div>
+
+
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-primary">Guardar</button>
+    </div>
+    <div class="control">
+      <a href="{{ url_for('private_ingrediente.listado_ingredientes') }}" class="button is-light">Cancelar</a>
+    </div>
+  </div>
+</form>
+{% endblock %}

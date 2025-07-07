@@ -25,12 +25,15 @@ def agregar_ingrediente_a_plato(id_plato, id_ingrediente, cantidad, descripcion)
     Returns:
         None
     """
-    query ="""
-                INSERT INTO plato_ingrediente (id_plato, id_ingrediente, cantidad, descripcion)
-                VALUES (%s, %s, %s, %s)
-            """
-    params =(id_plato, id_ingrediente, cantidad, descripcion)
-    return safe_execute(query, params)
+    try:
+        query = """
+            INSERT INTO contener (id_plato_fk, id_ingrediente_fk, cantidad, breve_descripcion)
+            VALUES (%s, %s, %s, %s)
+        """
+        return safe_execute(query, (id_plato, id_ingrediente, cantidad, descripcion))
+    except Exception as e:
+        print(f"[ERROR agregar_ingrediente_a_plato] {e}")
+        return None
 
 
 def obtener_ingredientes_de_plato(id_plato):
@@ -43,15 +46,26 @@ def obtener_ingredientes_de_plato(id_plato):
     Returns:
         list: Lista de ingredientes con cantidad y unidad de medida.
     """
-    query ="""
-                SELECT i.id, i.nombre, pi.cantidad, i.unidad_medida, pi.descripcion
-                FROM ingredientes i
-                JOIN plato_ingrediente pi ON i.id = pi.id_ingrediente
-                WHERE pi.id_plato = %s
-            """
-    params =(id_plato,)
-    return safe_execute(query, params, fetch=True) or []
-    
+    try:
+        query = """
+        SELECT 
+            i.id_ingrediente, 
+            i.nombre, 
+            u.nombre AS unidad, 
+            c.cantidad, 
+            c.breve_descripcion AS breve_descripcion
+        FROM 
+            contener c
+        JOIN ingrediente i ON i.id_ingrediente = c.id_ingrediente_fk
+        JOIN unidad_medida u ON u.id_unidad_medida = i.id_unidad_medida_fk
+        WHERE 
+            c.id_plato_fk = %s
+        """
+        return safe_execute(query, (id_plato,), fetch=True) or []
+    except Exception as e:
+        print(f"[ERROR obtener_ingredientes_de_plato] {e}")
+        return []
+        
 
 def eliminar_ingrediente_de_plato(id_plato, id_ingrediente):
     """
@@ -64,9 +78,12 @@ def eliminar_ingrediente_de_plato(id_plato, id_ingrediente):
     Returns:
         None
     """
-    query ="""
-                DELETE FROM plato_ingrediente
-                WHERE id_plato = %s AND id_ingrediente = %s
-            """
-    params = (id_plato, id_ingrediente)
-    return safe_execute(query, params)
+    try:
+        query = """
+            DELETE FROM contener
+            WHERE id_plato_fk = %s AND id_ingrediente_fk = %s
+        """
+        return safe_execute(query, (id_plato, id_ingrediente))
+    except Exception as e:
+        print(f"[ERROR eliminar_ingrediente_de_plato] {e}")
+        return None
