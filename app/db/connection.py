@@ -18,7 +18,9 @@ def get_connection():
         with conn.cursor() as cur:
             cur.execute("SHOW client_encoding;")
             encoding = cur.fetchone()
+            name =  dbname=os.getenv("DB_NAME")
             print("[INFO] Codificación cliente:", encoding)
+            print(name)
         
         return conn
     except Exception as e:
