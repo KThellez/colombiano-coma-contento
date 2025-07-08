@@ -1,4 +1,4 @@
-CREATE DATABASE colombiano WITH ENCODING 'UTF8';
+CREATE DATABASE colombiano;
 
 -- Eliminar todas las tablas si existen
 DROP TABLE IF EXISTS facturar, detallar, ofrecer, contener,
